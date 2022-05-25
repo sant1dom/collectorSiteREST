@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 # Created by https://www.toptal.com/developers/gitignore/api/maven,java,intellij
 # Edit at https://www.toptal.com/developers/gitignore?templates=maven,java,intellij
@@ -116,6 +117,8 @@ fabric.properties
 .idea/**/azureSettings.xml
 
 ### Java ###
+=======
+>>>>>>> origin/main
 # Compiled class file
 *.class
 
