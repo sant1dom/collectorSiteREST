@@ -1,5 +1,5 @@
 
-package org.swa.jackson;
+package org.swa.collectorsite.jackson;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;

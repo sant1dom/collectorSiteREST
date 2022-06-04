@@ -1,4 +1,4 @@
-package org.swa;
+package org.swa.collectorsite;
 
 import com.fasterxml.jackson.jakarta.rs.json.JacksonJsonProvider;
 import java.util.Collections;
@@ -6,10 +6,11 @@ import java.util.HashSet;
 import java.util.Set;
 import jakarta.ws.rs.ApplicationPath;
 import jakarta.ws.rs.core.Application;
-import org.swa.jackson.ObjectMapperContextResolver;
-import org.swa.security.AppExceptionMapper;
-import org.swa.security.CORSFilter;
-import org.swa.security.LoggedFilter;
+import org.swa.collectorsite.jackson.ObjectMapperContextResolver;
+import org.swa.collectorsite.resources.AutoriResource;
+import org.swa.collectorsite.security.AppExceptionMapper;
+import org.swa.collectorsite.security.CORSFilter;
+import org.swa.collectorsite.security.LoggedFilter;
 
 
 @ApplicationPath("rest")
@@ -22,9 +23,7 @@ public class RESTApp extends Application {
         //aggiungiamo tutte le *root resurces* (cioè quelle
         //con l'annotazione Path) che vogliamo pubblicare
 
-        /*c.add(FattureResource.class);
-        c.add(ProdottiResource.class);
-        c.add(AutenticazioneResource.class);*/
+        c.add(AutoriResource.class);
 
         //aggiungiamo il provider Jackson per poter
         //usare i suoi servizi di serializzazione e 

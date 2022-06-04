@@ -1,4 +1,4 @@
-package org.swa.security;
+package org.swa.collectorsite.security;
 
 import java.util.UUID;
 import jakarta.servlet.http.HttpServletRequest;

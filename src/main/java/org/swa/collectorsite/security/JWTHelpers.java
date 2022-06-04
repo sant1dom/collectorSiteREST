@@ -1,4 +1,4 @@
-package org.swa.security;
+package org.swa.collectorsite.security;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.logging.Level;

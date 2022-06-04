@@ -3,7 +3,7 @@ info:
   title: Collector Site
   version: 1.0.0
 servers:
-  - url: http://localhost:8080/CollectorSite
+  - url: http://localhost:8080/collectorSite
 paths:
   #1
   '/rest/auth/login':

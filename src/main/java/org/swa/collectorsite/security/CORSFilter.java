@@ -1,4 +1,4 @@
-package org.swa.security;
+package org.swa.collectorsite.security;
 
 import java.io.IOException;
 import jakarta.ws.rs.container.ContainerRequestContext;

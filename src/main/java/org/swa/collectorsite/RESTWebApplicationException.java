@@ -1,4 +1,4 @@
-package org.swa;
+package org.swa.collectorsite;
 
 
 import jakarta.ws.rs.WebApplicationException;

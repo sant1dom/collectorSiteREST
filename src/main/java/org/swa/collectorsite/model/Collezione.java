@@ -1,4 +1,4 @@
-package org.swa.model;
+package org.swa.collectorsite.model;
 
 import java.time.LocalDate;
 import java.util.List;
