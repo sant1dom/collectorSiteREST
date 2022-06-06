@@ -242,8 +242,8 @@ paths:
             schema:
               $ref: '#/components/schemas/Disco'
       responses:
-        '200':
-          description: Aggiungi disco alla collezione
+        '201':
+          description: Aggiunto disco alla collezione
           content:
             application/json:
               schema:
