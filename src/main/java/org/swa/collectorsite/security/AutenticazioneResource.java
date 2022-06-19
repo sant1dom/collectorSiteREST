@@ -1,5 +1,6 @@
 package org.swa.collectorsite.security;
 
+import java.sql.*;
 import java.util.UUID;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.ws.rs.Consumes;
@@ -16,6 +17,13 @@ import jakarta.ws.rs.core.UriInfo;
 
 @Path("auth")
 public class AutenticazioneResource {
+
+    Class c = Class.forName("com.mysql.jdbc.Driver");
+    Connection con = DriverManager.getConnection(
+            "jdbc:mysql://localhost:3306/collector_site?noAccessToProcedureBodies=true&serverTimezone=Europe/Rome", "collectorsite","Collectorsite0@");
+
+    public AutenticazioneResource() throws ClassNotFoundException, SQLException {
+    }
 
     @POST
     @Path("/login")
@@ -61,11 +69,18 @@ public class AutenticazioneResource {
     }
 
     private boolean authenticate(String username, String password) {
-        /* autenticare! */
-        return true;
+        try (PreparedStatement stmt = con.prepareStatement("SELECT * FROM utente WHERE username = ? AND password = ?")) {
+            stmt.setString(1, username);
+            stmt.setString(2, Encryption.encryptPassword(password));
+            try (ResultSet rs = stmt.executeQuery()) {
+                return rs.next();
+            }
+        } catch (SQLException e) {
+            return false;
+        }
     }
 
-    private String issueToken(UriInfo context, String username) {
+        private String issueToken(UriInfo context, String username) {
         /* registrare il token e associarlo all'utenza */
         String token = username + UUID.randomUUID().toString();
         /* per esempio */
@@ -83,6 +98,6 @@ public class AutenticazioneResource {
     }
 
     private void revokeToken(String token) {
-        /* invalidate il token */
+        /* cancellare il token dalla tabella */
     }
 }

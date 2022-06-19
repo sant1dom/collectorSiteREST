@@ -4,6 +4,8 @@ package org.swa.collectorsite.jackson;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+
+import java.time.LocalDate;
 import java.util.Calendar;
 import jakarta.ws.rs.ext.ContextResolver;
 import jakarta.ws.rs.ext.Provider;
@@ -35,10 +37,9 @@ public class ObjectMapperContextResolver implements ContextResolver<ObjectMapper
         //configuriamo i nostri serializzatori custom
         customSerializer.addSerializer(Calendar.class, new JavaCalendarSerializer());
         customSerializer.addDeserializer(Calendar.class, new JavaCalendarDeserializer());
-        //
-        /*customSerializer.addSerializer(Fattura.class, new FatturaSerializer());
-        customSerializer.addDeserializer(Fattura.class, new FatturaDeserializer());*/
-        //
+
+        customSerializer.addSerializer(LocalDate.class, new JavaLocalDateSerializer());
+        customSerializer.addDeserializer(LocalDate.class, new JavaLocalDateDeserializer());
 
         mapper.registerModule(customSerializer);
 

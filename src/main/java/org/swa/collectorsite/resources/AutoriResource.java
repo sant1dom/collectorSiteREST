@@ -16,9 +16,9 @@ import java.util.*;
 @Path("autori")
 public class AutoriResource {
 
-        Class c = Class.forName("com.mysql.jdbc.Driver");
-        Connection con = DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/collector_site?noAccessToProcedureBodies=true&serverTimezone=Europe/Rome", "collectorsite","Collectorsite0@");
+    Class c = Class.forName("com.mysql.jdbc.Driver");
+    Connection con = DriverManager.getConnection(
+            "jdbc:mysql://localhost:3306/collector_site?noAccessToProcedureBodies=true&serverTimezone=Europe/Rome", "collectorsite","Collectorsite0@");
 
     public AutoriResource() throws SQLException, ClassNotFoundException {
         // Auto-generated constructor stub

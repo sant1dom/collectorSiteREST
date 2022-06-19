@@ -38,7 +38,8 @@ public class CollezioniResource {
 
     // Operazione 2
     @GET
-    @Path("{username}")
+    @Path("{username}/private")
+    @Produces("application/json")
     public Response getCollezioniPrivateUtente(@PathParam("username") String username){
         List<Map<String, Object>> collezioni = new ArrayList<>();
         try(PreparedStatement stmt = con.prepareStatement("SELECT * FROM collezione WHERE utente_id = (SELECT id FROM utente WHERE username = ?)")){
@@ -52,6 +53,7 @@ public class CollezioniResource {
     // Operazione 3
     @GET
     @Path("{username}/condivise")
+    @Produces("application/json")
     public Response getCollezioniCondiviseUtente(@PathParam("username") String username){
         List<Map<String, Object>> collezioni = new ArrayList<>();
         try(PreparedStatement stmt = con.prepareStatement("SELECT * FROM collezione JOIN collezione_condivisa_con ccc on collezione.id = ccc.collezione_id WHERE ccc.utente_id = (SELECT id FROM utente WHERE username = ?)")){
@@ -86,6 +88,7 @@ public class CollezioniResource {
 
     @GET
     @Path("{id_collezione}/dischi")
+    @Produces("application/json")
     public Response getDischiCollezione(@PathParam("id_collezione") int id_collezione){
         List<Map<String, Object>> dischi = new ArrayList<>();
         try(PreparedStatement stmt = con.prepareStatement("SELECT * FROM disco JOIN collezione_disco cd on disco.id = cd.disco_id WHERE cd.collezione_id = ?")){
@@ -110,6 +113,7 @@ public class CollezioniResource {
     // Operazione 5
     @GET
     @Path("{id_collezione}/dischi/{id_disco}")
+    @Produces("application/json")
     public Response getDiscoCollezione(@PathParam("id_collezione") int id_collezione, @PathParam("id_disco") int id_disco){
         try(PreparedStatement stmt = con.prepareStatement("SELECT * FROM disco JOIN collezione_disco cd on disco.id = cd.disco_id WHERE cd.collezione_id = ? AND cd.disco_id = ?")){
             stmt.setInt(1, id_collezione);
@@ -128,7 +132,7 @@ public class CollezioniResource {
         }
     }
 
-
+    @Produces("application/json")
     private Response createCollezioni(String username, List<Map<String, Object>> collezioni, PreparedStatement stmt) throws SQLException {
         stmt.setString(1, username);
         try(ResultSet rs = stmt.executeQuery()) {

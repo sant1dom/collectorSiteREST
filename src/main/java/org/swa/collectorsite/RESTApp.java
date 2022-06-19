@@ -8,7 +8,10 @@ import jakarta.ws.rs.ApplicationPath;
 import jakarta.ws.rs.core.Application;
 import org.swa.collectorsite.jackson.ObjectMapperContextResolver;
 import org.swa.collectorsite.resources.AutoriResource;
+import org.swa.collectorsite.resources.CollezioniResource;
+import org.swa.collectorsite.resources.DischiResource;
 import org.swa.collectorsite.security.AppExceptionMapper;
+import org.swa.collectorsite.security.AutenticazioneResource;
 import org.swa.collectorsite.security.CORSFilter;
 import org.swa.collectorsite.security.LoggedFilter;
 
@@ -20,10 +23,16 @@ public class RESTApp extends Application {
 
     public RESTApp() {
         HashSet<Class<?>> c = new HashSet<>();
-        //aggiungiamo tutte le *root resurces* (cioè quelle
+        //aggiungiamo tutte le *root resources* (cioè quelle
         //con l'annotazione Path) che vogliamo pubblicare
 
         c.add(AutoriResource.class);
+
+        c.add(CollezioniResource.class);
+
+        c.add(DischiResource.class);
+
+        c.add(AutenticazioneResource.class);
 
         //aggiungiamo il provider Jackson per poter
         //usare i suoi servizi di serializzazione e 

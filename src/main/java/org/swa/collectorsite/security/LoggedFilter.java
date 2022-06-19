@@ -93,7 +93,7 @@ public class LoggedFilter implements ContainerRequestFilter {
 //      Key key = AppGlobals.getInstance().getJwtKey();
 //      Jws<Claims> jwsc = Jwts.parser().setSigningKey(key).parseClaimsJws(token);
 //      return jwsc.getBody().getSubject();
-        return "pippo"; //andrebbe derivato dal token!
+        return "user";
     }
 
 }
