@@ -52,7 +52,7 @@ paths:
         '500':
           $ref: '#/components/responses/GeneralError'
   #2
-  '/rest/collezioni/{username}':
+  '/rest/collezioni/{username}/all':
     get:
       operationId: getCollezioniPrivateUtente
       tags:
@@ -310,7 +310,7 @@ paths:
               $ref: '#/components/responses/NotFoundError'
   '/rest/collezioni/dischi':
     get:
-      operationId: getDischiPubblici
+      operationId: ricercaDiscoCollezioniPubbliche
       tags:
         - collezioni
       parameters:
@@ -335,6 +335,11 @@ paths:
           schema:
             type: string
         - name: etichetta
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: formato
           in: query
           required: false
           schema:

@@ -77,7 +77,7 @@ public class AutoriResource {
     @Path("{id}/dischi")
     @Produces("application/json")
     public Response getDischiByAutore(@PathParam("id") int id) throws SQLException {
-        try(PreparedStatement sAutore = con.prepareStatement("SELECT * FROM disco JOIN autore_disco ON disco.id = autore_disco.id_disco WHERE autore_disco.id_autore = ?")){
+        try(PreparedStatement sAutore = con.prepareStatement("SELECT * FROM disco JOIN disco_autore ON disco.id = disco_autore.disco_id WHERE disco_autore.autore_id = ?")){
             sAutore.setInt(1, id);
             try(ResultSet rs = sAutore.executeQuery()){
                 List<Map<String, Object>> dischi = new ArrayList<>();
