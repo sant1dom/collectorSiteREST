@@ -7,6 +7,8 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 
 import java.time.LocalDate;
 import java.util.Calendar;
+
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import jakarta.ws.rs.ext.ContextResolver;
 import jakarta.ws.rs.ext.Provider;
 
@@ -37,12 +39,9 @@ public class ObjectMapperContextResolver implements ContextResolver<ObjectMapper
         //configuriamo i nostri serializzatori custom
         customSerializer.addSerializer(Calendar.class, new JavaCalendarSerializer());
         customSerializer.addDeserializer(Calendar.class, new JavaCalendarDeserializer());
-
-        customSerializer.addSerializer(LocalDate.class, new JavaLocalDateSerializer());
-        customSerializer.addDeserializer(LocalDate.class, new JavaLocalDateDeserializer());
-
+        mapper.registerModule(new JavaTimeModule());
         mapper.registerModule(customSerializer);
-
+        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
         return mapper;
     }
 }

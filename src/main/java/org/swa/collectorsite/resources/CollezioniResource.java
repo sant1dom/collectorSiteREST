@@ -8,10 +8,10 @@ import org.swa.collectorsite.RESTWebApplicationException;
 
 import java.net.URI;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.*;
 
 @Path("collezioni")
 public class CollezioniResource {
@@ -29,7 +29,7 @@ public class CollezioniResource {
             collezione.put("id",rs.getInt("id"));
             collezione.put("titolo",rs.getString("titolo"));
             collezione.put("privacy", rs.getString("privacy"));
-            collezione.put("data_creazione", rs.getDate("data_creazione"));
+            collezione.put("data_creazione", new SimpleDateFormat("dd/MM/yyyy").format(rs.getDate("data_creazione")));
             return collezione;
         } catch (SQLException ex) {
             throw new RESTWebApplicationException(ex);
