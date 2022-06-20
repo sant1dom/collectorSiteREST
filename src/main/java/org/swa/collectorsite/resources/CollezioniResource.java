@@ -5,6 +5,7 @@ import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriInfo;
 import org.swa.collectorsite.RESTWebApplicationException;
+import org.swa.collectorsite.model.Disco;
 
 import java.net.URI;
 import java.sql.*;
@@ -140,7 +141,7 @@ public class CollezioniResource {
                                                     @QueryParam("genere") String genere,
                                                     @QueryParam("formato") String formato,
                                                     @QueryParam("autore") String autore){
-        StringBuilder query = null;
+        StringBuilder query;
         if(autore != null){
             query = new StringBuilder("SELECT * FROM disco JOIN collezione_disco cd on disco.id = cd.disco_id JOIN disco_autore ad on disco.id = ad.disco_id JOIN autore a on ad.autore_id = a.id WHERE cd.collezione_id IN (SELECT id FROM collezione WHERE privacy = 'PUBBLICO') AND titolo LIKE ? AND genere LIKE ? AND formato LIKE ? AND a.nome_artistico LIKE ?");
         } else {
@@ -163,7 +164,6 @@ public class CollezioniResource {
                     stmt.setInt(4, anno);
                 }
             }
-            System.out.println(stmt);
             try(ResultSet rs = stmt.executeQuery()){
                 List<Map<String, Object>> dischi = new ArrayList<>();
                 while(rs.next()){
@@ -178,6 +178,108 @@ public class CollezioniResource {
             }
         }
         catch (SQLException ex) {
+            throw new RESTWebApplicationException(ex);
+        }
+    }
+
+    @GET
+    @Produces("application/json")
+    @Path("{username}/condivise/dischi")
+    public Response ricercaDischiCondivisi(@PathParam("username") String username,
+                                       @QueryParam("titolo") String titolo,
+                                       @QueryParam("anno") int anno,
+                                       @QueryParam("genere") String genere,
+                                       @QueryParam("formato") String formato,
+                                       @QueryParam("autore") String autore){
+        StringBuilder query;
+        if(autore != null){
+            query = new StringBuilder("SELECT * FROM disco JOIN collezione_disco cd on disco.id = cd.disco_id JOIN disco_autore ad on disco.id = ad.disco_id JOIN autore a on ad.autore_id = a.id JOIN collezione_condivisa_con cc on cd.collezione_id = cc.collezione_id WHERE cc.utente_id = (SELECT id FROM utente WHERE username=?) AND titolo LIKE ? AND genere LIKE ? AND formato LIKE ? AND a.nome_artistico LIKE ?");
+        } else {
+            query = new StringBuilder("SELECT * FROM disco JOIN collezione_disco cd on disco.id = cd.disco_id JOIN disco_autore ad on disco.id = ad.disco_id JOIN collezione_condivisa_con cc on cd.collezione_id = cc.collezione_id WHERE cc.utente_id = (SELECT id FROM utente WHERE username=?) AND titolo LIKE ? AND genere LIKE ? AND formato LIKE ?");
+        }
+        if(anno != 0){
+            query.append(" AND anno = ?");
+        }
+        try(PreparedStatement stmt = con.prepareStatement(query.toString())) {
+            stmt.setString(1, username);
+            stmt.setString(2, "%" + ((titolo != null) ? titolo : "") + "%");
+            stmt.setString(3, "%" + ((genere != null) ? genere : "") + "%");
+            stmt.setString(4, "%" + ((formato != null) ? formato : "") + "%");
+            if (autore != null) {
+                stmt.setString(5, "%" + autore + "%");
+                if (anno != 0) {
+                    stmt.setInt(6, anno);
+                }
+            } else {
+                if (anno != 0) {
+                    stmt.setInt(5, anno);
+                }
+            }
+            try (ResultSet rs = stmt.executeQuery()) {
+                List<Map<String, Object>> dischi = new ArrayList<>();
+                while (rs.next()) {
+                    dischi.add(DischiResource.createDisco(rs));
+                }
+                if (dischi.isEmpty()) {
+                    return Response.status(Response.Status.NOT_FOUND).build();
+                } else {
+                    return Response.ok(dischi).build();
+                }
+            } catch (SQLException ex) {
+                throw new RESTWebApplicationException(ex);
+            }
+        } catch (SQLException ex) {
+            throw new RESTWebApplicationException(ex);
+        }
+    }
+
+    @GET
+    @Produces("application/json")
+    @Path("{username}/private/dischi")
+    public Response ricercaDischiPrivati(@PathParam("username") String username,
+                                        @QueryParam("titolo") String titolo,
+                                        @QueryParam("anno") int anno,
+                                        @QueryParam("genere") String genere,
+                                        @QueryParam("formato") String formato,
+                                        @QueryParam("autore") String autore){
+        StringBuilder query;
+        if(autore != null){
+            query = new StringBuilder("SELECT * FROM disco JOIN collezione_disco cd on disco.id = cd.disco_id JOIN collezione collezione on cd.collezione_id = collezione.id JOIN disco_autore ad on disco.id = ad.disco_id JOIN autore a on ad.autore_id = a.id WHERE collezione.utente_id = (SELECT id FROM utente WHERE username=?) AND disco.titolo LIKE ? AND genere LIKE ? AND formato LIKE ? AND a.nome_artistico LIKE ? AND collezione.privacy = 'PRIVATO'");
+        } else {
+            query = new StringBuilder("SELECT * FROM disco JOIN collezione_disco cd on disco.id = cd.disco_id JOIN collezione collezione on cd.collezione_id = collezione.id WHERE collezione.utente_id = (SELECT id FROM utente WHERE username=?) AND disco.titolo LIKE ? AND genere LIKE ? AND formato LIKE ? AND collezione.privacy = 'PRIVATO'");
+        }
+        if(anno != 0){
+            query.append(" AND anno = ?");
+        }
+        try(PreparedStatement stmt = con.prepareStatement(query.toString())) {
+            stmt.setString(1, username);
+            stmt.setString(2, "%" + ((titolo != null) ? titolo : "") + "%");
+            stmt.setString(3, "%" + ((genere != null) ? genere : "") + "%");
+            stmt.setString(4, "%" + ((formato != null) ? formato : "") + "%");
+            if (autore != null) {
+                stmt.setString(5, "%" + autore + "%");
+                if (anno != 0) {
+                    stmt.setInt(6, anno);
+                }
+            } else {
+                if (anno != 0) {
+                    stmt.setInt(5, anno);
+                }
+            }
+            try (ResultSet rs = stmt.executeQuery()) {
+                List<Map<String, Object>> dischi = new ArrayList<>();
+                while (rs.next()) {
+                    dischi.add(DischiResource.createDisco(rs));
+                }
+                if (dischi.isEmpty()) {
+                    return Response.status(Response.Status.NOT_FOUND).build();
+                } else {
+                    return Response.ok(dischi).build();
+                }
+            } catch (SQLException ex) {
+                throw new RESTWebApplicationException(ex);
+            }
+        } catch (SQLException ex) {
             throw new RESTWebApplicationException(ex);
         }
     }
