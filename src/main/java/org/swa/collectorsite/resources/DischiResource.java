@@ -64,12 +64,17 @@ public class DischiResource {
     @GET
     @Path("{id}")
     @Produces("application/json")
-    public Response getDisco(@PathParam("id") int id) throws SQLException {
+    public Response getDisco(@PathParam("id") int id, @Context UriInfo uriInfo) throws SQLException {
         try(PreparedStatement sDischi = con.prepareStatement("SELECT * FROM disco WHERE id = ?")){
             sDischi.setInt(1, id);
             try (ResultSet rs = sDischi.executeQuery()) {
                 if (rs.next()) {
-                    return Response.ok(createDisco(rs)).build();
+                    var disco = createDisco(rs);
+                    disco.put("padre", uriInfo.getBaseUriBuilder()
+                            .path(DischiResource.class)
+                            .path(DischiResource.class, "getDisco")
+                            .build(rs.getInt("padre")).toString());
+                    return Response.ok(disco).build();
                 } else {
                     return Response.status(Response.Status.NOT_FOUND).build();
                 }

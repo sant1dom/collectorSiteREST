@@ -17,25 +17,26 @@ public class AutoriResource {
 
     Class c = Class.forName("com.mysql.jdbc.Driver");
     Connection con = DriverManager.getConnection(
-            "jdbc:mysql://localhost:3306/collector_site?noAccessToProcedureBodies=true&serverTimezone=Europe/Rome", "collectorsite","Collectorsite0@");
+            "jdbc:mysql://localhost:3306/collector_site?noAccessToProcedureBodies=true&serverTimezone=Europe/Rome", "collectorsite", "Collectorsite0@");
 
     public AutoriResource() throws SQLException, ClassNotFoundException {
         // Auto-generated constructor stub
     }
 
-    static Map<String,   Object> createAutore(ResultSet rs) {
+    static Map<String, Object> createAutore(ResultSet rs) {
         try {
             Map<String, Object> autore = new LinkedHashMap<>();
-            autore.put("id",rs.getInt("id"));
-            autore.put("nome",rs.getString("nome"));
+            autore.put("id", rs.getInt("id"));
+            autore.put("nome", rs.getString("nome"));
             autore.put("cognome", rs.getString("cognome"));
             autore.put("nome_artistico", rs.getString("nome_artistico"));
-            autore.put("tipologia_autore",rs.getString("tipologia_autore"));
+            autore.put("tipologia_autore", rs.getString("tipologia_autore"));
             return autore;
         } catch (SQLException ex) {
             throw new RESTWebApplicationException(ex);
         }
     }
+
     // Operazione 8
     @GET
     @Produces("application/json")
@@ -60,16 +61,15 @@ public class AutoriResource {
     @Path("{id}")
     @Produces("application/json")
     public Response getAutore(@Context UriInfo uriinfo, @PathParam("id") int id) throws SQLException {
-        try(PreparedStatement sAutore = con.prepareStatement("SELECT * FROM autore WHERE id = ?")){
+        try (PreparedStatement sAutore = con.prepareStatement("SELECT * FROM autore WHERE id = ?")) {
             sAutore.setInt(1, id);
-            try(ResultSet rs = sAutore.executeQuery()){
-                if(rs.next()){
+            try (ResultSet rs = sAutore.executeQuery()) {
+                if (rs.next()) {
                     return Response.ok(createAutore(rs)).build();
                 } else {
                     return Response.status(Response.Status.NOT_FOUND).build();
                 }
-            }
-            catch (SQLException e) {
+            } catch (SQLException e) {
                 throw new RESTWebApplicationException(e);
             }
         }
@@ -79,23 +79,26 @@ public class AutoriResource {
     @Path("{id}/dischi")
     @Produces("application/json")
     public Response getDischiByAutore(@PathParam("id") int id, @Context UriInfo uriinfo) throws SQLException {
-        try(PreparedStatement sDischiAutore = con.prepareStatement("SELECT * FROM disco JOIN disco_autore ON disco.id = disco_autore.disco_id WHERE disco_autore.autore_id = ?")){
+        try (PreparedStatement sDischiAutore = con.prepareStatement("SELECT * FROM disco " +
+                "JOIN disco_autore ON disco.id = disco_autore.disco_id " +
+                "JOIN collezione_disco cd on disco.id = cd.disco_id " +
+                "JOIN collezione c on cd.collezione_id = c.id WHERE disco_autore.autore_id = ? AND c.privacy = 'PUBBLICO'")) {
+
             sDischiAutore.setInt(1, id);
-            try(ResultSet rs = sDischiAutore.executeQuery()){
+            try (ResultSet rs = sDischiAutore.executeQuery()) {
                 List<String> dischi = new ArrayList<>();
                 while (rs.next()) {
                     dischi.add(uriinfo.getBaseUriBuilder()
-                                        .path(DischiResource.class)
-                                        .path(DischiResource.class, "getDisco")
-                                        .build(rs.getInt("id")).toString());
+                            .path(DischiResource.class)
+                            .path(DischiResource.class, "getDisco")
+                            .build(rs.getInt("id")).toString());
                 }
                 if (dischi.isEmpty()) {
                     return Response.status(Response.Status.NOT_FOUND).build();
                 } else {
                     return Response.ok(dischi).build();
                 }
-            }
-            catch (SQLException e) {
+            } catch (SQLException e) {
                 throw new RESTWebApplicationException(e);
             }
         }

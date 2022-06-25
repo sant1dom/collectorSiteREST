@@ -4,8 +4,11 @@ import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.SecurityContext;
 import org.swa.collectorsite.RESTWebApplicationException;
+import org.swa.collectorsite.security.Logged;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -100,17 +103,19 @@ public class StatsResource {
 
 
     @GET
-    @Path("/numero_collezioni_private_utente/{utente_id}")
+    @Logged
+    @Path("/numero_collezioni_private_utente")
     @Produces("application/json")
-    public Response getNumeroCollezioniPrivateUtente(@PathParam("utente_id") int utente) {
-        return buildStats(utente, numeroCollezioniPrivateUtente, "numero_collezioni_private_utente");
+    public Response getNumeroCollezioniPrivateUtente(@Context SecurityContext securityContext) {
+        return buildStats(securityContext.getUserPrincipal().getName(), numeroCollezioniPrivateUtente, "numero_collezioni_private_utente");
     }
 
     @GET
-    @Path("/numero_collezioni_totali_utente/{utente_id}")
+    @Logged
+    @Path("/numero_collezioni_totali_utente")
     @Produces("application/json")
-    public Response getNumeroCollezioniTotaliUtente(@PathParam("utente_id") int utente) {
-        return buildStats(utente, numeroCollezioniTotaliUtente, "numero_collezioni_totali_utente");
+    public Response getNumeroCollezioniTotaliUtente(@Context SecurityContext securityContext) {
+        return buildStats(securityContext.getUserPrincipal().getName(), numeroCollezioniTotaliUtente, "numero_collezioni_totali_utente");
     }
 
     private <T> Response buildStats(T param, PreparedStatement stmt, String key) {

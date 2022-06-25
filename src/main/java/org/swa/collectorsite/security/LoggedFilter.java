@@ -1,7 +1,16 @@
 package org.swa.collectorsite.security;
 
 import java.io.IOException;
+import java.security.Key;
 import java.security.Principal;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.Jwts;
 import jakarta.annotation.Priority;
 import jakarta.ws.rs.Priorities;
 import jakarta.ws.rs.container.ContainerRequestContext;
@@ -22,10 +31,10 @@ public class LoggedFilter implements ContainerRequestFilter {
     UriInfo uriInfo;
 
     @Override
-    public void filter(ContainerRequestContext requestContext) throws IOException {        
+    public void filter(@Context ContainerRequestContext requestContext) throws IOException {
         String token = null;
         final String path = requestContext.getUriInfo().getAbsolutePath().toString();
-        
+
         //come esempio, proviamo a cercare il token in vari punti, in ordine di priorità
         //in un'applicazione reale, potremmo scegliere una sola modalità
         String authorizationHeader = requestContext.getHeaderString(HttpHeaders.AUTHORIZATION);
@@ -61,15 +70,18 @@ public class LoggedFilter implements ContainerRequestFilter {
                                 }
                             };
                         }
+
                         @Override
                         public boolean isUserInRole(String role) {
                             //qui andrebbe verificato se l'utente ha il ruolo richiesto
                             return true;
                         }
+
                         @Override
-                        public boolean isSecure() {                            
+                        public boolean isSecure() {
                             return path.startsWith("https");
                         }
+
                         @Override
                         public String getAuthenticationScheme() {
                             return "Token-Based-Auth-Scheme";
@@ -89,11 +101,19 @@ public class LoggedFilter implements ContainerRequestFilter {
     }
 
     private String validateToken(String token) {
-//      //JWT                
-//      Key key = AppGlobals.getInstance().getJwtKey();
-//      Jws<Claims> jwsc = Jwts.parser().setSigningKey(key).parseClaimsJws(token);
-//      return jwsc.getBody().getSubject();
-        return "user";
-    }
+        try{
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con = DriverManager.getConnection(
+                    "jdbc:mysql://localhost:3306/collector_site?noAccessToProcedureBodies=true&serverTimezone=Europe/Rome", "collectorsite","Collectorsite0@");
+            String query = "SELECT id FROM utente_rest WHERE token = '" + token + "'";
+            PreparedStatement pst = con.prepareStatement( query );
+            ResultSet rs = pst.executeQuery();
 
+            if( rs.next() ) {
+                return rs.getString("id");
+            }
+            else { return ""; }
+        }
+        catch (Exception ex) { return ""; }
+    }
 }

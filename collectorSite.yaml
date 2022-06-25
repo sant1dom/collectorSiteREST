@@ -52,22 +52,16 @@ paths:
         '500':
           $ref: '#/components/responses/GeneralError'
   #2
-  '/rest/collezioni/{username}/all':
+  '/rest/collezioni/all':
     get:
       operationId: getCollezioniPrivateUtente
       tags:
         - collezioni
       security:
         - bearerAuth: [ ]
-      parameters:
-        - name: username
-          in: path
-          required: true
-          schema:
-            type: string
       responses:
         '200':
-          description: Lista collezioni private utente
+          description: Lista collezioni di un utente
           content:
             application/json:
               schema:
@@ -79,19 +73,13 @@ paths:
         '500':
           $ref: '#/components/responses/GeneralError'
   #3
-  '/rest/collezioni/{username}/condivise':
+  '/rest/collezioni/condivise':
     get:
       operationId: getCollezioniCondiviseUtente
       tags:
         - collezioni
       security:
         - bearerAuth: [ ]
-      parameters:
-        - name: username
-          in: path
-          required: true
-          schema:
-            type: string
       responses:
         '200':
           description: Collezioni condivise con un utente
@@ -109,10 +97,10 @@ paths:
   '/rest/collezioni/{id_collezione}':
     get:
       operationId: getCollezione
-      tags:
-        - collezioni
       security:
         - bearerAuth: [ ]
+      tags:
+        - collezioni
       parameters:
         - name: id_collezione
           in: path
@@ -135,10 +123,10 @@ paths:
   '/rest/collezioni/{id_collezione}/dischi':
     get:
       operationId: getDischiCollezione
-      tags:
-        - collezioni
       security:
         - bearerAuth: [ ]
+      tags:
+        - collezioni
       parameters:
         - name: id_collezione
           in: path
@@ -244,10 +232,17 @@ paths:
       responses:
         '201':
           description: Aggiunto disco alla collezione
+          headers:
+            location:
+              description: url del disco aggiunto
+              schema:
+                type: string
+                format: uri
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Disco'
+                type: string
+                format: uri
         '401':
           $ref: '#/components/responses/UnauthorizedError'
         '500':
@@ -255,7 +250,7 @@ paths:
         '404':
           $ref: '#/components/responses/NotFoundError'
   #7
-  '/rest/collezioni/{username}/dischi':
+  '/rest/collezioni/private/dischi':
     get:
         operationId: getDischiUtente
         tags:
@@ -263,11 +258,6 @@ paths:
         security:
             - bearerAuth: [ ]
         parameters:
-            - name: username
-              in: path
-              required: true
-              schema:
-                  type: string
             - name: anno
               in: query
               required: false
@@ -359,7 +349,7 @@ paths:
           $ref: '#/components/responses/GeneralError'
         '404':
           $ref: '#/components/responses/NotFoundError'
-  '/rest/collezioni/{username}/condivise/dischi':
+  '/rest/collezioni/condivise/dischi':
     get:
       operationId: getDischiCondivisiUtente
       tags:
@@ -367,11 +357,6 @@ paths:
       security:
         - bearerAuth: [ ]
       parameters:
-        - name: username
-          in: path
-          required: true
-          schema:
-            type: string
         - name: anno
           in: query
           required: false
@@ -418,9 +403,7 @@ paths:
       operationId: getAutori
       tags:
           - autori
-      parameters:
-        - $ref: '#/components/parameters/pagerFrom'
-        - $ref: '#/components/parameters/pagerTo'
+
       responses:
         '200':
           description: Lista di tutti gli autori
@@ -464,8 +447,6 @@ paths:
           required: true
           schema:
             type: integer
-        - $ref: '#/components/parameters/pagerFrom'
-        - $ref: '#/components/parameters/pagerTo'
       tags:
         - autori
       responses:
@@ -601,17 +582,13 @@ paths:
                     type: integer
         '500':
           $ref: '#/components/responses/GeneralError'
-  '/rest/stats/numero_collezioni_private_utente/{utente_id}':
+  '/rest/stats/numero_collezioni_private_utente':
     get:
       operationId: getNumeroCollezioniPrivateUtente
+      security:
+        - bearerAuth: []
       tags:
           - stats
-      parameters:
-        - name: utente_id
-          in: path
-          required: true
-          schema:
-            type: integer
       responses:
         '200':
           description: Numero di collezioni private di un utente
@@ -624,17 +601,13 @@ paths:
                     type: integer
         '500':
           $ref: '#/components/responses/GeneralError'
-  '/rest/stats/numero_collezioni_totali_utente/{utente_id}':
+  '/rest/stats/numero_collezioni_totali_utente':
     get:
       operationId: getNumeroCollezioniTotaliUtente
+      security:
+        - bearerAuth: [ ]
       tags:
           - stats
-      parameters:
-        - name: utente_id
-          in: path
-          required: true
-          schema:
-            type: integer
       responses:
         '200':
           description: Numero di collezioni totali di un utente
@@ -685,48 +658,7 @@ components:
               schema:
                 type: string
                 example: "Operazione non permessa"
-  parameters:
-    pagerFrom:
-      name: from
-      in: query
-      required: false
-      schema:
-        type: integer
-        format: int32
-        minimum: 0
-        default: 0
-    pagerTo:
-      name: to
-      in: query
-      required: false
-      schema:
-        type: integer
-        format: int32
-        minimum: 0
   schemas:
-    Utente:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int32
-          readOnly: true
-        username:
-          type: string
-          example: "username"
-        password:
-          type: string
-          example: "password"
-        email:
-            type: string
-            format: email
-            example: "email@email.com"
-        nome:
-          type: string
-          example: "Mario"
-        cognome:
-            type: string
-            example: "Rossi"
     Collezione:
       type: object
       properties:
@@ -745,9 +677,10 @@ components:
           format: date
           readOnly: true
         dischi:
-          type: array
-          items:
-            $ref: '#/components/schemas/Disco'
+          type: string
+          format: uri
+
+
     Disco:
       type: object
       properties:
@@ -778,7 +711,9 @@ components:
           format: date
           readOnly: true
         padre:
-          $ref: '#/components/schemas/Disco'
+          type: string
+          format: uri
+
     Autore:
         type: object
         properties:
@@ -800,20 +735,27 @@ components:
     Genere:
       type: string
       enum:
-        - ROCK
-        - METAL
         - POP
+        - ROCK
         - JAZZ
-        - CLASSICA
-        - MELODICA
+        - CLASSIC
+        - METAL
         - RAP
+        - BLUES
+        - PUNK
+        - REGGAE
+        - COUNTRY
+        - HIPHOP
+        - ELECTRONIC
+        - OTHER
     StatoConservazione:
       type: string
       enum:
         - NUOVO
         - BUONO
-        - MEDIO
-        - ROVINATO
+        - USATO
+        - SCARSO
+        - ROTTO
     Tipologia:
       type: string
       enum:
@@ -824,9 +766,5 @@ components:
       type: string
       enum:
         - CD
-        - VINYL
+        - VINILE
         - DIGITAL
-
-
-
-
