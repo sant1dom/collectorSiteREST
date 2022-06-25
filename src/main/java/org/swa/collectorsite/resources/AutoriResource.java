@@ -8,7 +8,6 @@ import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriInfo;
 import org.swa.collectorsite.RESTWebApplicationException;
-import org.swa.collectorsite.model.TipologiaAutore;
 
 import java.sql.*;
 import java.util.*;
@@ -41,11 +40,14 @@ public class AutoriResource {
     @GET
     @Produces("application/json")
     public Response getAutori(@Context UriInfo uriinfo) throws SQLException {
-        PreparedStatement sAutori = con.prepareStatement("SELECT * FROM autore");
-        List<Map<String, Object>> autori = new ArrayList<>();
+        PreparedStatement sAutori = con.prepareStatement("SELECT id FROM autore");
+        List<String> autori = new ArrayList<>();
         try (ResultSet rs = sAutori.executeQuery()) {
             while (rs.next()) {
-                autori.add(createAutore(rs));
+                autori.add(uriinfo.getBaseUriBuilder()
+                        .path(AutoriResource.class)
+                        .path(AutoriResource.class, "getAutore")
+                        .build(rs.getInt("id")).toString());
             }
         } catch (SQLException e) {
             throw new RESTWebApplicationException(e);
@@ -76,13 +78,16 @@ public class AutoriResource {
     @GET
     @Path("{id}/dischi")
     @Produces("application/json")
-    public Response getDischiByAutore(@PathParam("id") int id) throws SQLException {
-        try(PreparedStatement sAutore = con.prepareStatement("SELECT * FROM disco JOIN disco_autore ON disco.id = disco_autore.disco_id WHERE disco_autore.autore_id = ?")){
-            sAutore.setInt(1, id);
-            try(ResultSet rs = sAutore.executeQuery()){
-                List<Map<String, Object>> dischi = new ArrayList<>();
+    public Response getDischiByAutore(@PathParam("id") int id, @Context UriInfo uriinfo) throws SQLException {
+        try(PreparedStatement sDischiAutore = con.prepareStatement("SELECT * FROM disco JOIN disco_autore ON disco.id = disco_autore.disco_id WHERE disco_autore.autore_id = ?")){
+            sDischiAutore.setInt(1, id);
+            try(ResultSet rs = sDischiAutore.executeQuery()){
+                List<String> dischi = new ArrayList<>();
                 while (rs.next()) {
-                    dischi.add(DischiResource.createDisco(rs));
+                    dischi.add(uriinfo.getBaseUriBuilder()
+                                        .path(DischiResource.class)
+                                        .path(DischiResource.class, "getDisco")
+                                        .build(rs.getInt("id")).toString());
                 }
                 if (dischi.isEmpty()) {
                     return Response.status(Response.Status.NOT_FOUND).build();

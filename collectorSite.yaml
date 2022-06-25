@@ -744,6 +744,10 @@ components:
           type: string
           format: date
           readOnly: true
+        dischi:
+          type: array
+          items:
+            $ref: '#/components/schemas/Disco'
     Disco:
       type: object
       properties:
