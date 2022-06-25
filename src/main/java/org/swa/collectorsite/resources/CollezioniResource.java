@@ -5,11 +5,12 @@ import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriInfo;
 import org.swa.collectorsite.RESTWebApplicationException;
-import org.swa.collectorsite.model.Disco;
 
 import java.net.URI;
 import java.sql.*;
+import java.sql.Date;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.*;
 
 @Path("collezioni")
@@ -296,6 +297,45 @@ public class CollezioniResource {
             return Response.status(Response.Status.NOT_FOUND).build();
         } else {
             return Response.ok(collezioni).build();
+        }
+    }
+
+    @POST
+    @Consumes("application/json")
+    @Produces("application/json")
+    @Path("{id_collezione}/dischi")
+    public Response aggiungiDisco(@Context UriInfo uriinfo,@PathParam("id_collezione") int id_collezione, Map<String, Object> disco) {
+        String query = "INSERT INTO disco (titolo, anno, barcode, etichetta, data_inserimento,genere, formato, stato_conservazione, utente_id, padre) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        try(PreparedStatement stmt = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+            stmt.setString(1, (String) disco.get("titolo"));
+            stmt.setInt(2, (int) disco.get("anno"));
+            stmt.setString(3, (String) disco.get("barcode"));
+            stmt.setString(4, (String) disco.get("etichetta"));
+            stmt.setDate(5, Date.valueOf(LocalDate.now()));
+            stmt.setString(6, (String) disco.get("genere"));
+            stmt.setString(7, (String) disco.get("formato"));
+            stmt.setString(8, (String) disco.get("stato_conservazione"));
+            stmt.setInt(9, (int) disco.get("utente_id"));
+            if (disco.get("padre") != null) {
+                stmt.setInt(10, (int) disco.get("padre"));
+            } else {
+                stmt.setNull(10, Types.INTEGER);
+            }
+            stmt.executeUpdate();
+            try(ResultSet rs = stmt.getGeneratedKeys()) {
+                rs.next();
+                int id_disco = rs.getInt(1);
+                query = "INSERT INTO collezione_disco (collezione_id, disco_id) VALUES (?, ?)";
+                try(PreparedStatement stmt2 = con.prepareStatement(query)) {
+                    stmt2.setInt(1, id_collezione);
+                    stmt2.setInt(2, id_disco);
+                    stmt2.executeUpdate();
+                }
+                URI uri = uriinfo.getBaseUriBuilder().path("collezioni/" + id_collezione + "/dischi/" + id_disco).build();
+                return Response.created(uri).build();
+            }
+        } catch (SQLException ex) {
+            throw new RESTWebApplicationException(ex);
         }
     }
 }
