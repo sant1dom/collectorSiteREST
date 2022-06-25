@@ -30,7 +30,6 @@ public class DischiResource {
             disco.put("stato_conservazione",rs.getString("stato_conservazione"));
             disco.put("formato",rs.getString("formato"));
             disco.put("data_inserimento",rs.getDate("data_inserimento"));
-
             return disco;
         } catch (SQLException ex) {
             throw new RESTWebApplicationException(ex);

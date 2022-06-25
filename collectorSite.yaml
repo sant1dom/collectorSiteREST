@@ -416,6 +416,8 @@ paths:
   '/rest/autori':
     get:
       operationId: getAutori
+      tags:
+          - autori
       parameters:
         - $ref: '#/components/parameters/pagerFrom'
         - $ref: '#/components/parameters/pagerTo'
@@ -440,6 +442,8 @@ paths:
           required: true
           schema:
             type: integer
+      tags:
+        - autori
       responses:
         '200':
           description: Autore
@@ -462,6 +466,8 @@ paths:
             type: integer
         - $ref: '#/components/parameters/pagerFrom'
         - $ref: '#/components/parameters/pagerTo'
+      tags:
+        - autori
       responses:
         '200':
           description: Lista di tutti i dischi di un autore
@@ -470,11 +476,177 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Dischi'
+                  $ref: '#/components/schemas/Disco'
         '500':
           $ref: '#/components/responses/GeneralError'
         '404':
           $ref: '#/components/responses/NotFoundError'
+  #11
+  '/rest/stats':
+    get:
+      operationId: getStats
+      tags:
+          - stats
+      responses:
+        '200':
+          description: Statistiche
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  numero_dischi:
+                    type: integer
+                  numero_autori:
+                    type: integer
+                  numero_tracce:
+                    type: integer
+                  numero_etichette:
+                    type: integer
+                  numero_generi:
+                    type: integer
+                  numero_collezioni_pubbliche:
+                    type: integer
+        '500':
+          $ref: '#/components/responses/GeneralError'
+  '/rest/stats/dischi_per_genere/{genere}':
+    get:
+      operationId: getDischiPerGenere
+      tags:
+          - stats
+      parameters:
+        - name: genere
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Numero di dischi per genere
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  numero_dischi_per_genere:
+                    type: integer
+        '500':
+          $ref: '#/components/responses/GeneralError'
+  '/rest/stats/dischi_per_anno/{anno}':
+    get:
+      operationId: getDischiPerAnno
+      tags:
+          - stats
+      parameters:
+        - name: anno
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Numero di dischi per anno
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  numero_dischi_per_anno:
+                    type: integer
+        '500':
+          $ref: '#/components/responses/GeneralError'
+  '/rest/stats/dischi_per_autore/{autore}':
+    get:
+      operationId: getDischiPerAutore
+      tags:
+          - stats
+      parameters:
+        - name: autore
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Numero di dischi per autore
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  numero_dischi_per_autore:
+                    type: integer
+        '500':
+          $ref: '#/components/responses/GeneralError'
+  '/rest/stats/dischi_per_etichetta/{etichetta}':
+    get:
+      operationId: getDischiPerEtichetta
+      tags:
+          - stats
+      parameters:
+        - name: etichetta
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Numero di dischi per etichetta
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  numero_dischi_per_etichetta:
+                    type: integer
+        '500':
+          $ref: '#/components/responses/GeneralError'
+  '/rest/stats/numero_collezioni_private_utente/{utente_id}':
+    get:
+      operationId: getNumeroCollezioniPrivateUtente
+      tags:
+          - stats
+      parameters:
+        - name: utente_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Numero di collezioni private di un utente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  numero_collezioni_private_utente:
+                    type: integer
+        '500':
+          $ref: '#/components/responses/GeneralError'
+  '/rest/stats/numero_collezioni_totali_utente/{utente_id}':
+    get:
+      operationId: getNumeroCollezioniTotaliUtente
+      tags:
+          - stats
+      parameters:
+        - name: utente_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Numero di collezioni totali di un utente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  numero_collezioni_totali_utente:
+                    type: integer
+        '500':
+          $ref: '#/components/responses/GeneralError'
 
 components:
   securitySchemes:
@@ -492,7 +664,7 @@ components:
             example: "Messaggio di Errore"
     UnauthorizedError:
       description: bearer token mancante o non valido
-    NotFound:
+    NotFoundError:
       description: elemento non trovato
       content:
         text/plain:
@@ -555,10 +727,6 @@ components:
         cognome:
             type: string
             example: "Rossi"
-        collezioni:
-          type: array
-          items:
-              $ref: '#/components/schemas/Collezione'
     Collezione:
       type: object
       properties:
@@ -571,21 +739,11 @@ components:
           example: "Titolo Collezione"
         privacy:
           type: string
-          example: "privato"
+          example: "PRIVATO"
         dataCreazione:
           type: string
           format: date
           readOnly: true
-        utente:
-          $ref: '#/components/schemas/Utente'
-        dischi:
-          type: array
-          items:
-              $ref: '#/components/schemas/Disco'
-        condivisione:
-          type: array
-          items:
-              $ref: '#/components/schemas/Utente'
     Disco:
       type: object
       properties:
@@ -607,20 +765,6 @@ components:
         barcode:
           type: string
           example: "978020137962"
-        utente:
-          $ref: '#/components/schemas/Utente'
-        autore:
-          type: array
-          items:
-            $ref: '#/components/schemas/Autore'
-        immagini:
-          type: array
-          items:
-            $ref: '#/components/schemas/Immagine'
-        tracce:
-          type: array
-          items:
-            $ref: '#/components/schemas/Traccia'
         stato_conservazione:
           $ref: '#/components/schemas/StatoConservazione'
         formato:
@@ -649,53 +793,6 @@ components:
             example: "Al Bano"
           tipologia:
             $ref: '#/components/schemas/Tipologia'
-          dischi:
-            type: array
-            items:
-              $ref: '#/components/schemas/Disco'
-    Immagine:
-        type: object
-        properties:
-          id:
-            type: integer
-            format: int32
-            readOnly: true
-          filename:
-            type: string
-          disco:
-            $ref: '#/components/schemas/Disco'
-    Traccia:
-        type: object
-        properties:
-          id:
-            type: integer
-            format: int32
-            readOnly: true
-          titolo:
-            type: string
-            example: "Titolo Traccia"
-          durata:
-            type: integer
-            example: 120
-          iswc:
-            type: string
-            minLength: 15
-            maxLength: 15
-            example: "T-034.524.680-C"
-          dataCreazione:
-            type: string
-            format: date
-            readOnly: true
-          dischi:
-            type: array
-            items:
-              $ref: '#/components/schemas/Disco'
-          autori:
-            type: array
-            items:
-              $ref: '#/components/schemas/Autore'
-          padre:
-            $ref: '#/components/schemas/Traccia'
     Genere:
       type: string
       enum:

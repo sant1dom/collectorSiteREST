@@ -10,6 +10,7 @@ import org.swa.collectorsite.jackson.ObjectMapperContextResolver;
 import org.swa.collectorsite.resources.AutoriResource;
 import org.swa.collectorsite.resources.CollezioniResource;
 import org.swa.collectorsite.resources.DischiResource;
+import org.swa.collectorsite.resources.StatsResource;
 import org.swa.collectorsite.security.AppExceptionMapper;
 import org.swa.collectorsite.security.AutenticazioneResource;
 import org.swa.collectorsite.security.CORSFilter;
@@ -33,6 +34,8 @@ public class RESTApp extends Application {
         c.add(DischiResource.class);
 
         c.add(AutenticazioneResource.class);
+
+        c.add(StatsResource.class);
 
         //aggiungiamo il provider Jackson per poter
         //usare i suoi servizi di serializzazione e 

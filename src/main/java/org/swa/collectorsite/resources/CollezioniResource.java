@@ -36,33 +36,21 @@ public class CollezioniResource {
         }
     }
 
-    // Operazione 2
-    @GET
-    @Path("{username}/all")
     @Produces("application/json")
-    public Response getCollezioniUtente(@PathParam("username") String username){
-        List<Map<String, Object>> collezioni = new ArrayList<>();
-        try(PreparedStatement stmt = con.prepareStatement("SELECT * FROM collezione WHERE utente_id = (SELECT id FROM utente WHERE username = ?)")){
-            return createCollezioni(username, collezioni, stmt);
+    private Response createCollezioni(String username, List<Map<String, Object>> collezioni, PreparedStatement stmt) throws SQLException {
+        stmt.setString(1, username);
+        try(ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                collezioni.add(createCollezione(rs));
+            }
         }
-        catch (SQLException ex) {
-            throw new RESTWebApplicationException(ex);
+        if (collezioni.isEmpty()) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        } else {
+            return Response.ok(collezioni).build();
         }
     }
 
-    // Operazione 3
-    @GET
-    @Path("{username}/condivise")
-    @Produces("application/json")
-    public Response getCollezioniCondiviseUtente(@PathParam("username") String username){
-        List<Map<String, Object>> collezioni = new ArrayList<>();
-        try(PreparedStatement stmt = con.prepareStatement("SELECT * FROM collezione JOIN collezione_condivisa_con ccc on collezione.id = ccc.collezione_id WHERE ccc.utente_id = (SELECT id FROM utente WHERE username = ?)")){
-            return createCollezioni(username, collezioni, stmt);
-        }
-        catch (SQLException ex) {
-            throw new RESTWebApplicationException(ex);
-        }
-    }
     // Operazione 4
     @GET
     @Path("{id_collezione}")
@@ -111,6 +99,46 @@ public class CollezioniResource {
         }
     }
 
+    //Operazione 6
+    @POST
+    @Consumes("application/json")
+    @Produces("application/json")
+    @Path("{id_collezione}/dischi")
+    public Response aggiungiDisco(@Context UriInfo uriinfo,@PathParam("id_collezione") int id_collezione, Map<String, Object> disco) {
+        String query = "INSERT INTO disco (titolo, anno, barcode, etichetta, data_inserimento,genere, formato, stato_conservazione, utente_id, padre) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        try(PreparedStatement stmt = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+            stmt.setString(1, (String) disco.get("titolo"));
+            stmt.setInt(2, (int) disco.get("anno"));
+            stmt.setString(3, (String) disco.get("barcode"));
+            stmt.setString(4, (String) disco.get("etichetta"));
+            stmt.setDate(5, Date.valueOf(LocalDate.now()));
+            stmt.setString(6, (String) disco.get("genere"));
+            stmt.setString(7, (String) disco.get("formato"));
+            stmt.setString(8, (String) disco.get("stato_conservazione"));
+            stmt.setInt(9, (int) disco.get("utente_id"));
+            if (disco.get("padre") != null) {
+                stmt.setInt(10, (int) disco.get("padre"));
+            } else {
+                stmt.setNull(10, Types.INTEGER);
+            }
+            stmt.executeUpdate();
+            try(ResultSet rs = stmt.getGeneratedKeys()) {
+                rs.next();
+                int id_disco = rs.getInt(1);
+                query = "INSERT INTO collezione_disco (collezione_id, disco_id) VALUES (?, ?)";
+                try(PreparedStatement stmt2 = con.prepareStatement(query)) {
+                    stmt2.setInt(1, id_collezione);
+                    stmt2.setInt(2, id_disco);
+                    stmt2.executeUpdate();
+                }
+                URI uri = uriinfo.getBaseUriBuilder().path("collezioni/" + id_collezione + "/dischi/" + id_disco).build();
+                return Response.created(uri).build();
+            }
+        } catch (SQLException ex) {
+            throw new RESTWebApplicationException(ex);
+        }
+    }
+
     // Operazione 5
     @GET
     @Path("{id_collezione}/dischi/{id_disco}")
@@ -132,6 +160,36 @@ public class CollezioniResource {
             throw new RESTWebApplicationException(ex);
         }
     }
+
+    // Operazione 10
+    @PUT
+    @Consumes("application/json")
+    @Produces("application/json")
+    @Path("{id_collezione}/dischi/{id_disco}")
+    public Response modificaDisco(@PathParam("id_collezione") int id_collezione, @PathParam("id_disco") int id_disco, Map<String, Object> disco) {
+        String query = "UPDATE disco SET titolo = ?, anno = ?, barcode = ?, etichetta = ?, genere = ?, formato = ?, stato_conservazione = ?, utente_id = ?, padre = ? WHERE id = ?";
+        try(PreparedStatement stmt = con.prepareStatement(query)) {
+            stmt.setString(1, (String) disco.get("titolo"));
+            stmt.setInt(2, (int) disco.get("anno"));
+            stmt.setString(3, (String) disco.get("barcode"));
+            stmt.setString(4, (String) disco.get("etichetta"));
+            stmt.setString(5, (String) disco.get("genere"));
+            stmt.setString(6, (String) disco.get("formato"));
+            stmt.setString(7, (String) disco.get("stato_conservazione"));
+            stmt.setInt(8, (int) disco.get("utente_id"));
+            if (disco.get("padre") != null) {
+                stmt.setInt(9, (int) disco.get("padre"));
+            } else {
+                stmt.setNull(9, Types.INTEGER);
+            }
+            stmt.setInt(10, id_disco);
+            stmt.executeUpdate();
+            return Response.status(Response.Status.NO_CONTENT).build();
+        } catch (SQLException ex) {
+            throw new RESTWebApplicationException(ex);
+        }
+    }
+
 
     //Operazione 7
     @GET
@@ -183,6 +241,33 @@ public class CollezioniResource {
         }
     }
 
+    // Operazione 2
+    @GET
+    @Path("{username}/all")
+    @Produces("application/json")
+    public Response getCollezioniUtente(@PathParam("username") String username){
+        List<Map<String, Object>> collezioni = new ArrayList<>();
+        try(PreparedStatement stmt = con.prepareStatement("SELECT * FROM collezione WHERE utente_id = (SELECT id FROM utente WHERE username = ?)")){
+            return createCollezioni(username, collezioni, stmt);
+        }
+        catch (SQLException ex) {
+            throw new RESTWebApplicationException(ex);
+        }
+    }
+
+    // Operazione 3
+    @GET
+    @Path("{username}/condivise")
+    @Produces("application/json")
+    public Response getCollezioniCondiviseUtente(@PathParam("username") String username){
+        List<Map<String, Object>> collezioni = new ArrayList<>();
+        try(PreparedStatement stmt = con.prepareStatement("SELECT * FROM collezione JOIN collezione_condivisa_con ccc on collezione.id = ccc.collezione_id WHERE ccc.utente_id = (SELECT id FROM utente WHERE username = ?)")){
+            return createCollezioni(username, collezioni, stmt);
+        }
+        catch (SQLException ex) {
+            throw new RESTWebApplicationException(ex);
+        }
+    }
     @GET
     @Produces("application/json")
     @Path("{username}/condivise/dischi")
@@ -280,90 +365,6 @@ public class CollezioniResource {
             } catch (SQLException ex) {
                 throw new RESTWebApplicationException(ex);
             }
-        } catch (SQLException ex) {
-            throw new RESTWebApplicationException(ex);
-        }
-    }
-
-    @Produces("application/json")
-    private Response createCollezioni(String username, List<Map<String, Object>> collezioni, PreparedStatement stmt) throws SQLException {
-        stmt.setString(1, username);
-        try(ResultSet rs = stmt.executeQuery()) {
-            while (rs.next()) {
-                collezioni.add(createCollezione(rs));
-            }
-        }
-        if (collezioni.isEmpty()) {
-            return Response.status(Response.Status.NOT_FOUND).build();
-        } else {
-            return Response.ok(collezioni).build();
-        }
-    }
-
-    //Operazione 6
-    @POST
-    @Consumes("application/json")
-    @Produces("application/json")
-    @Path("{id_collezione}/dischi")
-    public Response aggiungiDisco(@Context UriInfo uriinfo,@PathParam("id_collezione") int id_collezione, Map<String, Object> disco) {
-        String query = "INSERT INTO disco (titolo, anno, barcode, etichetta, data_inserimento,genere, formato, stato_conservazione, utente_id, padre) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        try(PreparedStatement stmt = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
-            stmt.setString(1, (String) disco.get("titolo"));
-            stmt.setInt(2, (int) disco.get("anno"));
-            stmt.setString(3, (String) disco.get("barcode"));
-            stmt.setString(4, (String) disco.get("etichetta"));
-            stmt.setDate(5, Date.valueOf(LocalDate.now()));
-            stmt.setString(6, (String) disco.get("genere"));
-            stmt.setString(7, (String) disco.get("formato"));
-            stmt.setString(8, (String) disco.get("stato_conservazione"));
-            stmt.setInt(9, (int) disco.get("utente_id"));
-            if (disco.get("padre") != null) {
-                stmt.setInt(10, (int) disco.get("padre"));
-            } else {
-                stmt.setNull(10, Types.INTEGER);
-            }
-            stmt.executeUpdate();
-            try(ResultSet rs = stmt.getGeneratedKeys()) {
-                rs.next();
-                int id_disco = rs.getInt(1);
-                query = "INSERT INTO collezione_disco (collezione_id, disco_id) VALUES (?, ?)";
-                try(PreparedStatement stmt2 = con.prepareStatement(query)) {
-                    stmt2.setInt(1, id_collezione);
-                    stmt2.setInt(2, id_disco);
-                    stmt2.executeUpdate();
-                }
-                URI uri = uriinfo.getBaseUriBuilder().path("collezioni/" + id_collezione + "/dischi/" + id_disco).build();
-                return Response.created(uri).build();
-            }
-        } catch (SQLException ex) {
-            throw new RESTWebApplicationException(ex);
-        }
-    }
-
-    // Operazione 10
-    @PUT
-    @Consumes("application/json")
-    @Produces("application/json")
-    @Path("{id_collezione}/dischi/{id_disco}")
-    public Response modificaDisco(@PathParam("id_collezione") int id_collezione, @PathParam("id_disco") int id_disco, Map<String, Object> disco) {
-        String query = "UPDATE disco SET titolo = ?, anno = ?, barcode = ?, etichetta = ?, genere = ?, formato = ?, stato_conservazione = ?, utente_id = ?, padre = ? WHERE id = ?";
-        try(PreparedStatement stmt = con.prepareStatement(query)) {
-            stmt.setString(1, (String) disco.get("titolo"));
-            stmt.setInt(2, (int) disco.get("anno"));
-            stmt.setString(3, (String) disco.get("barcode"));
-            stmt.setString(4, (String) disco.get("etichetta"));
-            stmt.setString(5, (String) disco.get("genere"));
-            stmt.setString(6, (String) disco.get("formato"));
-            stmt.setString(7, (String) disco.get("stato_conservazione"));
-            stmt.setInt(8, (int) disco.get("utente_id"));
-            if (disco.get("padre") != null) {
-                stmt.setInt(9, (int) disco.get("padre"));
-            } else {
-                stmt.setNull(9, Types.INTEGER);
-            }
-            stmt.setInt(10, id_disco);
-            stmt.executeUpdate();
-            return Response.status(Response.Status.NO_CONTENT).build();
         } catch (SQLException ex) {
             throw new RESTWebApplicationException(ex);
         }
