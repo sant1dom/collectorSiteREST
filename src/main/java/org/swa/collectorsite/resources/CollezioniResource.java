@@ -300,6 +300,7 @@ public class CollezioniResource {
         }
     }
 
+    //Operazione 6
     @POST
     @Consumes("application/json")
     @Produces("application/json")
@@ -334,6 +335,35 @@ public class CollezioniResource {
                 URI uri = uriinfo.getBaseUriBuilder().path("collezioni/" + id_collezione + "/dischi/" + id_disco).build();
                 return Response.created(uri).build();
             }
+        } catch (SQLException ex) {
+            throw new RESTWebApplicationException(ex);
+        }
+    }
+
+    // Operazione 10
+    @PUT
+    @Consumes("application/json")
+    @Produces("application/json")
+    @Path("{id_collezione}/dischi/{id_disco}")
+    public Response modificaDisco(@PathParam("id_collezione") int id_collezione, @PathParam("id_disco") int id_disco, Map<String, Object> disco) {
+        String query = "UPDATE disco SET titolo = ?, anno = ?, barcode = ?, etichetta = ?, genere = ?, formato = ?, stato_conservazione = ?, utente_id = ?, padre = ? WHERE id = ?";
+        try(PreparedStatement stmt = con.prepareStatement(query)) {
+            stmt.setString(1, (String) disco.get("titolo"));
+            stmt.setInt(2, (int) disco.get("anno"));
+            stmt.setString(3, (String) disco.get("barcode"));
+            stmt.setString(4, (String) disco.get("etichetta"));
+            stmt.setString(5, (String) disco.get("genere"));
+            stmt.setString(6, (String) disco.get("formato"));
+            stmt.setString(7, (String) disco.get("stato_conservazione"));
+            stmt.setInt(8, (int) disco.get("utente_id"));
+            if (disco.get("padre") != null) {
+                stmt.setInt(9, (int) disco.get("padre"));
+            } else {
+                stmt.setNull(9, Types.INTEGER);
+            }
+            stmt.setInt(10, id_disco);
+            stmt.executeUpdate();
+            return Response.status(Response.Status.NO_CONTENT).build();
         } catch (SQLException ex) {
             throw new RESTWebApplicationException(ex);
         }
