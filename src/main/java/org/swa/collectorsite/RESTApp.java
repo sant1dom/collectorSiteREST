@@ -11,10 +11,7 @@ import org.swa.collectorsite.resources.AutoriResource;
 import org.swa.collectorsite.resources.CollezioniResource;
 import org.swa.collectorsite.resources.DischiResource;
 import org.swa.collectorsite.resources.StatsResource;
-import org.swa.collectorsite.security.AppExceptionMapper;
-import org.swa.collectorsite.security.AutenticazioneResource;
-import org.swa.collectorsite.security.CORSFilter;
-import org.swa.collectorsite.security.LoggedFilter;
+import org.swa.collectorsite.security.*;
 
 
 @ApplicationPath("rest")
@@ -53,6 +50,8 @@ public class RESTApp extends Application {
 
         //esempio di exception mapper, che mappa in Response eccezioni non già derivanti da WebApplicationException
         c.add(AppExceptionMapper.class);
+
+        c.add(JsonParseExceptionMapper.class);
 
         classes = Collections.unmodifiableSet(c);
     }
