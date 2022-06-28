@@ -1,0 +1,151 @@
+/**
+ * CSS per tutte le viste
+ * @author Davide De Acetis
+ */
+
+.page-container {
+    width: 100%;
+    height: 100%;
+    padding: 2rem;
+    min-height: calc(100vh - 64px);
+}
+
+/*CSS FLEXBOX*/
+.flex {
+    display: flex;
+}
+
+.justify-center {
+    justify-content: center;
+}
+
+.justify-between {
+    justify-content: space-between;
+}
+
+.justify-around {
+    justify-content: space-around;
+}
+
+.justify-end {
+    justify-content: end;
+}
+
+.align-items-center {
+    align-items: center;
+}
+
+.flex-wrap {
+    flex-wrap: wrap;
+}
+/*END CSS FLEXBOX*/
+
+.horizontal-separator {
+    background-color: gray;
+    height: 1px;
+    margin-bottom: 2rem;
+    margin-top: 2rem;
+    width: 100%;
+}
+
+.link {
+    text-decoration-line: underline;
+    color: black;
+}
+
+.link:hover {
+    text-decoration-line: underline;
+    color: blue;
+}
+
+.tabelle-filtro-container{
+    margin-top: 3rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+/*CSS PER LE FORM*/
+.form-card {
+    width: 70%;
+}
+
+.form-title {
+    color: black;
+    font-weight: bold;
+}
+
+.form-group {
+    margin: 0;
+    padding: 1.5rem;
+    width: 50%;
+}
+
+.bootstrap-select:not([class*=col-]):not([class*=form-control]):not(.input-group-btn) {
+    width: 100%; !important;
+}
+
+.form-control.selected {
+    background: greenyellow;
+    opacity: 0.5;
+}
+
+.dropdown.selected {
+    background: greenyellow;
+    border-radius: 5px;
+}
+
+.dropdown.off {
+    background: orangered;
+    border-radius: 5px;
+}
+
+.warning-msg {
+    color: orange;
+    padding-left: 1.5rem;
+}
+
+.input-small {
+    width: 4rem;
+}
+
+.btn-w-fixed {
+    width: 13rem;
+}
+
+/*END CSS FORM*/
+
+
+/*CSS WIDTH*/
+.cw-25 {
+    width: 25%;
+}
+/*END CSS WIDTH*/
+
+@media (max-width: 991px) {
+    .resp991 {
+        display: none;
+    }
+
+    .tabelle-filtro-container {
+        display: block;
+    }
+
+    .actions {
+        justify-content: space-evenly;
+    }
+
+    .tabelle-filtro-container, .actions {
+        padding: 0;
+    }
+
+    .btn-wd-fixed {
+        margin-left: 1rem;
+        margin-right: 1rem;
+    }
+
+    .form-group, .form-card, .tabelle-filtro-container {
+        width: 100%; !important;
+    }
+
+}

@@ -1,0 +1,75 @@
+/**
+ * CSS per il filtro delle tabelle
+ * @author Davide De Acetis
+ */
+.side-bar-container {
+    padding-bottom: 2rem;
+    width: 20rem;
+    height: 100%;
+}
+
+.filtro {
+    border: 1px solid grey;
+    border-top: none;
+}
+
+.filtro-header {
+    text-align: center;
+}
+
+.input-filtro, .input-filtro:focus {
+    width: 100%;
+    padding: 0.5rem;
+    border: none;
+    border-bottom: 1px solid grey;
+    outline: none;
+}
+
+.input-filtro.inner-table {
+    border-bottom: none;
+    margin-left: 2rem;
+    width: 100%;
+    max-width: 20rem;
+}
+
+.filtro-info {
+    padding: 0.5rem 1rem 0.5rem 1rem;
+}
+
+.filtro-subtitle {
+    display: block;
+    font-size: 1rem;
+    font-weight: bold;
+    color: black;
+}
+
+.filtro-link {
+    text-decoration-line: underline;
+    color: black;
+    font-weight: normal;
+}
+
+.filtro-link:hover {
+    text-decoration-line: underline;
+    color: blue;
+    font-weight: normal;
+}
+
+.filtro-horizontal-separator {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+@media (max-width: 991px) {
+
+
+    .side-bar-container {
+        width: 100%;
+        padding: 0 0 2rem;
+        display: block;
+    }
+
+    .input-filtro, .input-filtro:focus {
+        border-bottom: none;
+    }
+}

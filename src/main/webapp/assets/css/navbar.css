@@ -1,0 +1,118 @@
+/**
+ * CSS per la navbar
+ * @author Davide De Acetis
+ */
+
+.navbar {
+    padding: 0;
+    height: 4rem;
+}
+
+/* Logo */
+.navbar-brand {
+    margin-right: 3rem;
+    margin-left: 3rem;
+}
+/* ---- */
+
+/* Pulsanti di login */
+.bt-navbar-accedi {
+    color: white;
+    background: none;
+    border: none;
+    padding: 3px 10px;
+    height: 100%;
+}
+/* ---------------------------------- */
+
+/* Rettangolo nero intorno ai pulsanti */
+.nav-square {
+    height: 4rem;
+    padding: 10px 10px;
+}
+
+.nav-square:hover, .nav-square-accedi:hover {
+    background-color: black;
+}
+
+.nav-square-accedi {
+    height: 4rem;
+    padding: 20px 10px;
+    margin-right: 3rem;
+}
+
+a:not([href]):not([tabindex]), a:not([href]):not([tabindex]):hover, a:not([href]):not([tabindex]):focus {
+    color: white;
+    text-decoration: none;
+}
+
+.dropdown-menu {
+    padding: 1rem;
+    left: -10rem;
+}
+/* ----------------------------------- */
+
+.hidden {
+    display: none
+}
+
+@media (max-width: 991px) {
+    .navbar {
+        padding-top: 0.8rem;
+        padding-bottom: 0.8rem;
+    }
+
+    .navbar-toggler {
+        margin-right: 0.8rem;
+    }
+
+    .navbar-toggler:focus {
+        outline: none;
+    }
+
+    .navbar-brand {
+        margin-right: 0;
+        margin-left: 0.8rem;
+    }
+
+    .form-inline {
+        margin: 0;
+    }
+
+    .search-bar {
+        margin: 0;
+        width: 100%;
+    }
+
+    .btn-search {
+        padding-left: 0.2rem;
+    }
+
+    .nav-square, .nav-square-accedi{
+        background-color: black;
+        margin: 0;
+    }
+
+    .bt-navbar-accedi {
+        padding: 0;
+        margin: 0;
+    }
+
+    .form-inline {
+        margin-top: 1rem;
+    }
+
+    .resp991 {
+        display: none;
+    }
+
+    .hidden {
+        display: block;
+    }
+
+    .aligned {
+        display:flex;
+        align-items:center;
+        justify-content: space-between;
+    }
+}

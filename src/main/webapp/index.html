@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+
+<head>
+    <!-- META DATA -->
+    <meta charset="UTF-8">
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=0'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="Collector Site">
+    <title>Collectors Site Rest</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"/>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet"/>
+    <!-- lineicons -->
+    <link href="https://cdn.lineicons.com/3.0/lineicons.css" rel="stylesheet">
+    <!-- JQuery va messo prima sennò non si può usare -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+
+    <link href="assets/css/navbar.css" rel="stylesheet"/>
+
+    <link href="assets/css/style.css" rel="stylesheet"/>
+    <link href="assets/css/table.css" rel="stylesheet"/>
+    <link href="assets/css/carosello.css" rel="stylesheet"/>
+    <link href="assets/css/filtro.css" rel="stylesheet"/>
+
+    <link href="assets/css/search.css" rel="stylesheet"/>
+    <!-- CSS -->
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="z-index: 100; position: sticky; top: 0">
+    <a class="navbar-brand" href="#">Collector Site REST</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-nav mr-auto"></div>
+        <div class="login-form" id="login">
+            <div class="dropdown">
+                <div class="nav-square-accedi">
+                    <a class="bt-navbar-accedi" id="login-btn">Accedi</a>
+                </div>
+                <div class="dropdown-menu" id="login-form" style="margin-right: 3rem">
+                    <div class="form-group" style="width: 100%; padding: 0">
+                        <label for="username">Username</label>
+                        <input class="" type="text" placeholder="Username" id="username" name="username"
+                               style="width: 100%">
+                        <label for="password" style="margin-top: 1rem">Password</label>
+                        <input class="" type="password" placeholder="Password" id="password" name="password"
+                               style="width: 100%">
+                        <div style="text-align: center">
+                            <button class="btn btn-success" id="login-send" style="margin-top: 1rem">Login</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="login-form" id="logout" style="display: none">
+            <div class="nav-square-accedi">
+                <a class="bt-navbar-accedi" id="logout-send">Logout</a>
+            </div>
+        </div>
+        <div class="nav-square hidden aligned">
+            <a class="bt-navbar-registrati hidden">Logout</a>
+        </div>
+    </div>
+</nav>
+<div class="horizontal-separator filtro-horizontal-separator"></div>
+
+<div class="tabelle-filtro-container">
+    <div class="side-bar-container">
+        <div class="title">OPERAZIONI</div>
+        <div class="filtro">
+            <div class="filtro-list">
+                <dl class="filtro-info list-group list-group-flush">
+                    <dl>
+                        <dd class="flex justify-between">
+                            <div class="filtro-title" style="font-weight: bold; width: 4rem; text-align: center">
+                                <span class="filtro-title-text">INPUT</span>
+                            </div>
+                            <div class="filtro-icon" style="font-weight: bold; width: 13rem; text-align: center">
+                                OPERAZIONE
+                            </div>
+                        </dd>
+
+                        <dd class="flex justify-end">
+                            <button class="btn btn-primary btn-w-fixed" onclick="getCollezioniUtente()">getCollezioniUtente</button>
+                        </dd>
+                        <dd class="flex justify-end">
+                            <button class="btn btn-primary btn-w-fixed" onclick="getCollezioniCondivise()">getCollezioniCondivise</button>
+                        </dd>
+                        <dd class="flex justify-between">
+                            <input class="input-small" type="number" name="getCollezione" id="getCollezione">
+                            <button class="btn btn-primary btn-w-fixed" onclick="getCollezione($('#getCollezione').val())">getCollezione</button>
+                        </dd>
+<!--                        <dd class="flex justify-between">-->
+<!--                            <input class="input-small" type="number" name="getDischiCollezione" id="getDischiCollezione">-->
+<!--                            <button class="btn btn-primary btn-w-fixed" onclick="getDischiCollezione($('#getDischiCollezione').val())">getDischiCollezione-->
+<!--                            </button>-->
+<!--                        </dd>-->
+                    </dl>
+                </dl>
+            </div>
+        </div>
+    </div>
+    <div class="tables-container">
+        <div class="table-container" id="collezioni-container">
+            <div class="title flex justify-between align-items-center">
+                COLLEZIONI
+            </div>
+            <div class="table-scrollable">
+                <table class="table table-borderless table-striped">
+                    <thead class="table-dark">
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Titolo</th>
+                        <th scope="col">Data creazione</th>
+                        <th scope="col">Privacy</th>
+                    </tr>
+                    </thead>
+                    <tbody id="collezione-result">
+
+                    </tbody>
+                </table>
+                <div class="table-empty" id="collezione-empty">Non ci sono collezioni.</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</body>
+
+
+</html>
+
+<!-- FOOTER -->
+<footer>
+    <!-- SCRIPT -->
+    <!-- NON CAMBIARE ORDINE E VERSIONI SENNO SI SMINCHIA -->
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+
+    <!-- SCRIPTS PER TUTTE LE PAGINE -->
+    <script src="assets/js/utility.js"></script>
+    <!-- SCRIPTS PER L'AUTENTICAZIONE -->
+    <script src="assets/js/auth.js"></script>
+    <!-- SCRIPTS PER LE COLLEZIONI -->
+    <script src="assets/js/collezioni.js"></script>
+
+    <!-- END SCRIPT -->
+</footer>
+<!-- FOOTER END -->

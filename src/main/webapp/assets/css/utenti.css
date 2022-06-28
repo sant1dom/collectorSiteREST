@@ -1,0 +1,37 @@
+/**
+ * CSS per la pagina degli utenti
+ * @author Davide De Acetis
+ */
+
+.profile_img {
+    width: 10rem;
+    height: 10rem;
+    border: 3px solid #fff;
+    border-radius: 5px;
+    margin-top: 2.5rem;
+    margin-left: 2rem;
+    z-index: 3;
+    position: absolute;
+    background-image: url("/assets/images/users/default_profile_img.png");
+    background-size: cover;
+    background-position: center;
+}
+
+.profile_bg {
+    background-color: #222222;
+    height: 14rem;
+    width: 100%;
+}
+
+.name_line {
+    background-color: black;
+    height: 3.5rem;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@media (max-width: 991px) {
+
+}

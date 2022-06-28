@@ -1,0 +1,47 @@
+/**
+ * CSS per la pagina di ricerca
+ * @author Davide De Acetis
+ */
+
+.search_bg {
+    background-color: #222222;
+    width: 100%;
+}
+
+.search_line {
+    background-color: black;
+    height: 3.5rem;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.bt-advanced-search {
+    background-color: #f5df2b;
+    border-color: #f5df2b;
+    border-radius: 3px;
+    border-style: hidden;
+    padding: 3px 10px;
+    margin-right: 4rem;
+    margin-left: 1rem;
+    color: black;
+}
+
+.container-advanced-search {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    color: white;
+}
+
+.fieldlist{
+    min-width: 10rem;
+    padding: 2rem;
+}
+
+@media (max-width: 991px) {
+    .container-advanced-search {
+        justify-content: start;
+    }
+}

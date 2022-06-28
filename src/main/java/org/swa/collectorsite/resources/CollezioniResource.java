@@ -398,6 +398,9 @@ public class CollezioniResource {
     @Produces("application/json")
     public Response getCollezioniUtente(@Context UriInfo uriInfo, @Context SecurityContext securityContext) {
         List<String> collezioni = new ArrayList<>();
+
+        System.out.println(securityContext.getUserPrincipal().getName());
+
         try (PreparedStatement stmt = con.prepareStatement("SELECT id FROM collezione WHERE utente_id = ? ORDER BY id")) {
             return collezioniUriList(uriInfo, securityContext.getUserPrincipal().getName(), collezioni, stmt);
         } catch (SQLException ex) {

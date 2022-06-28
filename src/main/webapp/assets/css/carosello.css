@@ -1,0 +1,15 @@
+.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+}
+
+.carousel {
+    margin-bottom: 2rem;
+}
+
+.carousel-control-prev, .carousel-control-next {
+    filter: invert(100%);
+}
+

@@ -1,0 +1,11 @@
+/**
+ * CSS per la pagina degli errori
+ * @author Davide De Acetis
+ */
+
+.bg-image {
+    background-image: url("/assets/images/auth_bg.jpg");
+    min-height: 100vh;
+    padding-top: 10%;
+    z-index: -999;
+}
