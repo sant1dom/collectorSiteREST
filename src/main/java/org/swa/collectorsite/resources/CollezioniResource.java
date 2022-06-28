@@ -165,7 +165,6 @@ public class CollezioniResource {
             stmt.setInt(1, id_collezione);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    Map<String, Object> collezione = createCollezione(rs);
                     switch (rs.getString("privacy")) {
                         case "PRIVATO":
                             if (id_utente == rs.getInt("utente_id")) {
