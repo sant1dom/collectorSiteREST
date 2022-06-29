@@ -15,7 +15,7 @@ function getCollezioniUtente() {
             getCollezioni(data);
         },
         error: function (request, status, error) {
-            handleError(request, status, error);
+            handleError(request, status, error, collezione_empty);
         },
         cache: false,
     });
@@ -30,7 +30,7 @@ function getCollezioniCondivise() {
             getCollezioni(data);
         },
         error: function (request, status, error) {
-            handleError(request, status, error);
+            handleError(request, status, error, collezione_empty);
         },
         cache: false,
     });
@@ -38,33 +38,45 @@ function getCollezioniCondivise() {
 
 //4: Singola collezione
 function getCollezione(val) {
-    $.ajax({
-        url: "rest/collezioni/" + val,
-        method: "GET",
-        success: function (data) {
-            collezione_result.children().remove();
-            populateCollezione(data);
-        },
-        error: function (request, status, error) {
-            handleError(request, status, error);
-        },
-        cache: false,
-    });
+    if (val) {
+        $.ajax({
+            url: "rest/collezioni/" + val,
+            method: "GET",
+            success: function (data) {
+                collezione_result.children().remove();
+                populateCollezione(data);
+            },
+            error: function (request, status, error) {
+                handleError(request, status, error, collezione_empty);
+            },
+            cache: false,
+        });
+    } else {
+        collezione_result.children().remove();
+        collezione_empty.show();
+        collezione_empty.text("Non ci sono collezioni.");
+    }
 }
 
-//7: Collezioni private di un utente
-function getCollezioniPrivate() {
-    $.ajax({
-        url: "rest/collezioni/all",
-        method: "GET",
-        success: function (data) {
-            getCollezioni(data);
-        },
-        error: function (request, status, error) {
-            handleError(request, status, error);
-        },
-        cache: false,
-    });
+function updateDiscoCollezione(c, d) {
+    if (c && d) {
+        $.ajax({
+            url: "rest/collezioni/" + val,
+            method: "GET",
+            success: function (data) {
+                collezione_result.children().remove();
+                populateCollezione(data);
+            },
+            error: function (request, status, error) {
+                handleError(request, status, error, collezione_empty);
+            },
+            cache: false,
+        });
+    } else {
+        collezione_result.children().remove();
+        collezione_empty.show();
+        collezione_empty.text("Non ci sono collezioni.");
+    }
 }
 
 
@@ -80,12 +92,13 @@ function getCollezioni(data) {
                     populateCollezione(data);
                 },
                 error: function (request, status, error) {
-                    handleError(request, status, error);
+                    handleError(request, status, error, collezione_empty);
                 },
                 cache: false,
             });
         })
     } else {
+        collezione_result.children().remove();
         collezione_empty.show();
         collezione_empty.text("Non ci sono collezioni.");
     }
@@ -104,6 +117,7 @@ function populateCollezione (data) {
         collezione_result.append('<td>' + data['privacy'] + '</td>')
         collezione_result.append('</tr>')
     } else {
+        collezione_result.children().remove();
         collezione_empty.show();
         collezione_empty.text("Non ci sono collezioni.");
     }

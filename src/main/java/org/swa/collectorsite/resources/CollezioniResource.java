@@ -78,7 +78,8 @@ public class CollezioniResource {
     }
 
     private Response dischiUriList(@Context UriInfo uriinfo, ResultSet rs) throws SQLException {
-        List<String> dischi = new ArrayList<>();
+        Set<String> dischi = new HashSet<>();
+
         while (rs.next()) {
             dischi.add(uriinfo.getBaseUriBuilder().path(DischiResource.class).path(Integer.toString(rs.getInt("id"))).build().toString());
         }
@@ -161,7 +162,7 @@ public class CollezioniResource {
     public Response getDischiCollezione(@Context UriInfo uriInfo, @PathParam("id_collezione") int id_collezione, @Context ContainerRequestContext requestContext) {
         int id_utente = getIdUtente(requestContext);
 
-        try (PreparedStatement stmt = con.prepareStatement("SELECT * FROM collezione WHERE id = ?")) {
+        try (PreparedStatement stmt = con.prepareStatement("SELECT * FROM collezione WHERE id = ? ORDER BY id")) {
             stmt.setInt(1, id_collezione);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
@@ -179,14 +180,14 @@ public class CollezioniResource {
                             }
                         case "CONDIVISO":
                             if (id_utente > 0) {
-                                try (PreparedStatement stmt1 = con.prepareStatement("SELECT * FROM collezione JOIN collezione_condivisa_con ccc on collezione.id = ccc.collezione_id WHERE ccc.utente_id = ? AND collezione.id = ?")) {
+                                try (PreparedStatement stmt1 = con.prepareStatement("SELECT * FROM collezione JOIN collezione_condivisa_con ccc on collezione.id = ccc.collezione_id WHERE ccc.utente_id = ? AND collezione.id = ? ORDER BY collezione.id")) {
                                     stmt1.setInt(1, id_utente);
                                     stmt1.setInt(2, id_collezione);
                                     try (ResultSet rs1 = stmt1.executeQuery()) {
                                         if (rs1.next()) {
                                             try (PreparedStatement stmt2 = con.prepareStatement("SELECT disco.id FROM disco JOIN collezione_disco cd on disco.id = cd.disco_id WHERE cd.collezione_id = ? ORDER BY disco.id")) {
                                                 stmt2.setInt(1, id_collezione);
-                                                try (ResultSet rs2 = stmt.executeQuery()) {
+                                                try (ResultSet rs2 = stmt2.executeQuery()) {
                                                     return dischiUriList(uriInfo, rs2);
                                                 }
                                             }
@@ -203,7 +204,7 @@ public class CollezioniResource {
                         default:
                             try (PreparedStatement stmt2 = con.prepareStatement("SELECT disco.id FROM disco JOIN collezione_disco cd on disco.id = cd.disco_id WHERE cd.collezione_id = ? ORDER BY disco.id")) {
                                 stmt2.setInt(1, id_collezione);
-                                try (ResultSet rs2 = stmt.executeQuery()) {
+                                try (ResultSet rs2 = stmt2.executeQuery()) {
                                     return dischiUriList(uriInfo, rs2);
                                 }
                             }
@@ -398,7 +399,6 @@ public class CollezioniResource {
     public Response getCollezioniUtente(@Context UriInfo uriInfo, @Context SecurityContext securityContext) {
         List<String> collezioni = new ArrayList<>();
 
-        System.out.println(securityContext.getUserPrincipal().getName());
 
         try (PreparedStatement stmt = con.prepareStatement("SELECT id FROM collezione WHERE utente_id = ? ORDER BY id")) {
             return collezioniUriList(uriInfo, securityContext.getUserPrincipal().getName(), collezioni, stmt);
@@ -434,9 +434,9 @@ public class CollezioniResource {
                                            @Context SecurityContext securityContext) {
         StringBuilder query;
         if (autore != null) {
-            query = new StringBuilder("SELECT * FROM disco JOIN collezione_disco cd on disco.id = cd.disco_id JOIN disco_autore ad on disco.id = ad.disco_id JOIN autore a on ad.autore_id = a.id JOIN collezione_condivisa_con cc on cd.collezione_id = cc.collezione_id WHERE cc.utente_id = ? AND titolo LIKE ? AND genere LIKE ? AND formato LIKE ? AND a.nome_artistico LIKE ?");
+            query = new StringBuilder("SELECT disco.id FROM disco JOIN collezione_disco cd on disco.id = cd.disco_id JOIN disco_autore ad on disco.id = ad.disco_id JOIN autore a on ad.autore_id = a.id JOIN collezione_condivisa_con cc on cd.collezione_id = cc.collezione_id WHERE cc.utente_id = ? AND titolo LIKE ? AND genere LIKE ? AND formato LIKE ? AND a.nome_artistico LIKE ?");
         } else {
-            query = new StringBuilder("SELECT * FROM disco JOIN collezione_disco cd on disco.id = cd.disco_id JOIN disco_autore ad on disco.id = ad.disco_id JOIN collezione_condivisa_con cc on cd.collezione_id = cc.collezione_id WHERE cc.utente_id = ? AND titolo LIKE ? AND genere LIKE ? AND formato LIKE ?");
+            query = new StringBuilder("SELECT disco.id FROM disco JOIN collezione_disco cd on disco.id = cd.disco_id JOIN disco_autore ad on disco.id = ad.disco_id JOIN collezione_condivisa_con cc on cd.collezione_id = cc.collezione_id WHERE cc.utente_id = ? AND titolo LIKE ? AND genere LIKE ? AND formato LIKE ?");
         }
         if (anno != 0) {
             query.append(" AND anno = ?");
@@ -477,9 +477,9 @@ public class CollezioniResource {
                                          @Context SecurityContext securityContext) {
         StringBuilder query;
         if (autore != null) {
-            query = new StringBuilder("SELECT * FROM disco JOIN collezione_disco cd on disco.id = cd.disco_id JOIN collezione collezione on cd.collezione_id = collezione.id JOIN disco_autore ad on disco.id = ad.disco_id JOIN autore a on ad.autore_id = a.id WHERE collezione.utente_id = ? AND disco.titolo LIKE ? AND genere LIKE ? AND formato LIKE ? AND a.nome_artistico LIKE ? AND collezione.privacy = 'PRIVATO'");
+            query = new StringBuilder("SELECT * FROM disco JOIN collezione_disco cd on disco.id = cd.disco_id JOIN collezione collezione on cd.collezione_id = collezione.id JOIN disco_autore ad on disco.id = ad.disco_id JOIN autore a on ad.autore_id = a.id WHERE collezione.utente_id = ? AND disco.titolo LIKE ? AND genere LIKE ? AND formato LIKE ? AND a.nome_artistico LIKE ? AND collezione.privacy = 'PRIVATO' ORDER BY disco.id");
         } else {
-            query = new StringBuilder("SELECT * FROM disco JOIN collezione_disco cd on disco.id = cd.disco_id JOIN collezione collezione on cd.collezione_id = collezione.id WHERE collezione.utente_id = ? AND disco.titolo LIKE ? AND genere LIKE ? AND formato LIKE ? AND collezione.privacy = 'PRIVATO'");
+            query = new StringBuilder("SELECT * FROM disco JOIN collezione_disco cd on disco.id = cd.disco_id JOIN collezione collezione on cd.collezione_id = collezione.id WHERE collezione.utente_id = ? AND disco.titolo LIKE ? AND genere LIKE ? AND formato LIKE ? AND collezione.privacy = 'PRIVATO' ORDER BY disco.id");
         }
         if (anno != 0) {
             query.append(" AND anno = ?");
@@ -519,9 +519,9 @@ public class CollezioniResource {
                                                     @Context UriInfo uriinfo) {
         StringBuilder query;
         if (autore != null) {
-            query = new StringBuilder("SELECT * FROM disco JOIN collezione_disco cd on disco.id = cd.disco_id JOIN disco_autore ad on disco.id = ad.disco_id JOIN autore a on ad.autore_id = a.id WHERE cd.collezione_id IN (SELECT id FROM collezione WHERE privacy = 'PUBBLICO') AND titolo LIKE ? AND genere LIKE ? AND formato LIKE ? AND a.nome_artistico LIKE ?");
+            query = new StringBuilder("SELECT * FROM disco JOIN collezione_disco cd on disco.id = cd.disco_id JOIN disco_autore ad on disco.id = ad.disco_id JOIN autore a on ad.autore_id = a.id WHERE cd.collezione_id IN (SELECT id FROM collezione WHERE privacy = 'PUBBLICO') AND titolo LIKE ? AND genere LIKE ? AND formato LIKE ? AND a.nome_artistico LIKE ? ORDER BY disco.id");
         } else {
-            query = new StringBuilder("SELECT * FROM disco JOIN collezione_disco cd on disco.id = cd.disco_id WHERE cd.collezione_id IN (SELECT id FROM collezione WHERE privacy = 'PUBBLICO') AND titolo LIKE ? AND genere LIKE ? AND formato LIKE ?");
+            query = new StringBuilder("SELECT * FROM disco JOIN collezione_disco cd on disco.id = cd.disco_id WHERE cd.collezione_id IN (SELECT id FROM collezione WHERE privacy = 'PUBBLICO') AND titolo LIKE ? AND genere LIKE ? AND formato LIKE ? ORDER BY disco.id");
         }
         if (anno != 0) {
             query.append(" AND anno = ?");

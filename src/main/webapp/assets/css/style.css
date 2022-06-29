@@ -10,6 +10,10 @@
     min-height: calc(100vh - 64px);
 }
 
+.tab {
+    width: 100%;
+}
+
 /*CSS FLEXBOX*/
 .flex {
     display: flex;
@@ -112,7 +116,6 @@
 .btn-w-fixed {
     width: 13rem;
 }
-
 /*END CSS FORM*/
 
 

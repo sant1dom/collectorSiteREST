@@ -6,7 +6,7 @@ $(document).ready(function () {
     const logout_send = $('#logout-send');
     const logout = $('#logout');
 
-    if (!(document.cookie.indexOf('token') === null)) {
+    if (!(document.cookie.indexOf('token'))) {
         login.css('display', 'none');
         login_form.css('display', 'none');
         logout.css('display', 'block');

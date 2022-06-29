@@ -31,6 +31,7 @@
     <link href="assets/css/table.css" rel="stylesheet"/>
     <link href="assets/css/carosello.css" rel="stylesheet"/>
     <link href="assets/css/filtro.css" rel="stylesheet"/>
+    <link href="assets/css/tabBar.css" rel="stylesheet"/>
 
     <link href="assets/css/search.css" rel="stylesheet"/>
     <!-- CSS -->
@@ -77,15 +78,39 @@
         </div>
     </div>
 </nav>
-<div class="horizontal-separator filtro-horizontal-separator"></div>
 
-<div class="tabelle-filtro-container">
-    <div class="side-bar-container">
-        <div class="title">OPERAZIONI</div>
-        <div class="filtro">
-            <div class="filtro-list">
-                <dl class="filtro-info list-group list-group-flush">
-                    <dl>
+
+<div class="alert alert-success">
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-hidden="true">×</button>
+    <span class=""><svg xmlns="http://www.w3.org/2000/svg" height="40" width="40" viewBox="0 0 24 24"><path
+            fill="#13bfa6"
+            d="M10.3125,16.09375a.99676.99676,0,0,1-.707-.293L6.793,12.98828A.99989.99989,0,0,1,8.207,11.57422l2.10547,2.10547L15.793,8.19922A.99989.99989,0,0,1,17.207,9.61328l-6.1875,6.1875A.99676.99676,0,0,1,10.3125,16.09375Z"
+            opacity=".99"></path><path fill="#71d8c9"
+                                       d="M12,2A10,10,0,1,0,22,12,10.01146,10.01146,0,0,0,12,2Zm5.207,7.61328-6.1875,6.1875a.99963.99963,0,0,1-1.41406,0L6.793,12.98828A.99989.99989,0,0,1,8.207,11.57422l2.10547,2.10547L15.793,8.19922A.99989.99989,0,0,1,17.207,9.61328Z"></path></svg></span>
+    <strong>Success Message</strong>
+    <hr class="message-inner-separator">
+    <p>You successfully read this important alert message.</p>
+</div>
+
+<div class="tab-bar">
+    <button class="btn btn-warning tab-btn" id="tab-collezioni-btn">Collezioni</button>
+    <button class="btn btn-dark tab-btn" id="tab-autori-btn">Autori</button>
+    <button class="btn btn-dark tab-btn" id="tab-dischi-btn">Dischi</button>
+</div>
+<div class="tab-line"></div>
+
+<div class="title flex justify-between align-items-center mb-3">
+    INFO: <span id="message"></span>
+</div>
+
+<div class="tab" id="tab-collezioni">
+    <div class="tabelle-filtro-container">
+        <div class="side-bar-container">
+            <!--OPERAZIONI SULLE COLLEZIONI-->
+            <div class="title">OPERAZIONI SULLE COLLEZIONI</div>
+            <div class="filtro">
+                <div class="filtro-list">
+                    <dl class="filtro-info list-group list-group-flush">
                         <dd class="flex justify-between">
                             <div class="filtro-title" style="font-weight: bold; width: 4rem; text-align: center">
                                 <span class="filtro-title-text">INPUT</span>
@@ -96,50 +121,178 @@
                         </dd>
 
                         <dd class="flex justify-end">
-                            <button class="btn btn-primary btn-w-fixed" onclick="getCollezioniUtente()">getCollezioniUtente</button>
+                            <button class="btn btn-primary btn-w-fixed" onclick="getCollezioniUtente()">
+                                getCollezioniUtente
+                            </button>
                         </dd>
                         <dd class="flex justify-end">
-                            <button class="btn btn-primary btn-w-fixed" onclick="getCollezioniCondivise()">getCollezioniCondivise</button>
+                            <button class="btn btn-primary btn-w-fixed" onclick="getCollezioniCondivise()">
+                                getCollezioniCondivise
+                            </button>
                         </dd>
                         <dd class="flex justify-between">
-                            <input class="input-small" type="number" name="getCollezione" id="getCollezione">
-                            <button class="btn btn-primary btn-w-fixed" onclick="getCollezione($('#getCollezione').val())">getCollezione</button>
+                            <input class="input-small" type="number" min="1" name="getCollezione" id="getCollezione">
+                            <button class="btn btn-primary btn-w-fixed"
+                                    onclick="getCollezione($('#getCollezione').val())">getCollezione
+                            </button>
                         </dd>
-<!--                        <dd class="flex justify-between">-->
-<!--                            <input class="input-small" type="number" name="getDischiCollezione" id="getDischiCollezione">-->
-<!--                            <button class="btn btn-primary btn-w-fixed" onclick="getDischiCollezione($('#getDischiCollezione').val())">getDischiCollezione-->
-<!--                            </button>-->
-<!--                        </dd>-->
+                        <dd class="flex justify-between">
+                            <input class="input-small" type="number" min="1" name="updateDiscoCollezione_c"
+                                   id="updateDiscoCollezione_c">
+                            <input class="input-small" type="number" min="1" name="updateDiscoCollezione_d"
+                                   id="updateDiscoCollezione_d">
+                            <button class="btn btn-primary btn-w-fixed"
+                                    onclick="updateDiscoCollezione($('#updateDiscoCollezione_c').val(), $('#updateDiscoCollezione_d').val())">
+                                updateDiscoCollezione
+                            </button>
+                        </dd>
                     </dl>
-                </dl>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="tables-container">
-        <div class="table-container" id="collezioni-container">
-            <div class="title flex justify-between align-items-center">
-                COLLEZIONI
-            </div>
-            <div class="table-scrollable">
-                <table class="table table-borderless table-striped">
-                    <thead class="table-dark">
-                    <tr>
-                        <th scope="col">Id</th>
-                        <th scope="col">Titolo</th>
-                        <th scope="col">Data creazione</th>
-                        <th scope="col">Privacy</th>
-                    </tr>
-                    </thead>
-                    <tbody id="collezione-result">
+        <!--END OPERAZIONI SULLE COLLEZIONI-->
+        <!--TABELLA COLLEZIONI-->
+        <div class="tables-container">
+            <div class="table-container" id="collezioni-container">
+                <div class="title flex justify-between align-items-center">
+                    COLLEZIONI
+                </div>
+                <div class="table-scrollable">
+                    <table class="table table-borderless table-striped">
+                        <thead class="table-dark">
+                        <tr>
+                            <th scope="col">Id</th>
+                            <th scope="col">Titolo</th>
+                            <th scope="col">Data creazione</th>
+                            <th scope="col">Privacy</th>
+                        </tr>
+                        </thead>
+                        <tbody id="collezione-result">
 
-                    </tbody>
-                </table>
-                <div class="table-empty" id="collezione-empty">Non ci sono collezioni.</div>
+                        </tbody>
+                    </table>
+                    <div class="table-empty" id="collezione-empty">Non ci sono collezioni.</div>
+                </div>
             </div>
+            <!--END TABELLA COLLEZIONI-->
         </div>
     </div>
 </div>
 
+
+<div class="tab" id="tab-autori">
+    <div class="tabelle-filtro-container">
+        <div class="side-bar-container">
+            <!--OPERAZIONI SUGLI AUTORI-->
+            <div class="title">OPERAZIONI SUGLI AUTORI</div>
+            <div class="filtro">
+                <div class="filtro-list">
+                    <dl class="filtro-info list-group list-group-flush">
+                        <dd class="flex justify-end">
+                            <button class="btn btn-primary btn-w-fixed" onclick="getAutori()">getAutori</button>
+                        </dd>
+                        <dd class="flex justify-between">
+                            <input class="input-small" type="number" min="1" name="getAutore" id="getAutore">
+                            <button class="btn btn-primary btn-w-fixed" onclick="getAutore($('#getAutore').val())">
+                                getAutore
+                            </button>
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+            <!--END OPERAZIONI SUGLI AUTORI-->
+        </div>
+        <!--TABELLA AUTORI-->
+        <div class="tables-container">
+            <div class="table-container" id="autori-container">
+                <div class="title flex justify-between align-items-center">
+                    AUTORI
+                </div>
+                <div class="table-scrollable">
+                    <table class="table table-borderless table-striped">
+                        <thead class="table-dark">
+                        <tr>
+                            <th scope="col">Id</th>
+                            <th scope="col">Nome</th>
+                            <th scope="col">Cognome</th>
+                            <th scope="col">Nome d'arte</th>
+                            <th scope="col">Tipologia</th>
+                        </tr>
+                        </thead>
+                        <tbody id="autori-result">
+
+                        </tbody>
+                    </table>
+                    <div class="table-empty" id="autori-empty">Non ci sono autori.</div>
+                </div>
+            </div>
+            <!--END TABELLA AUTORI-->
+        </div>
+    </div>
+</div>
+
+<div class="tab" id="tab-dischi">
+    <div class="tabelle-filtro-container">
+        <div class="side-bar-container">
+            <!--OPERAZIONI SUI DISCHI-->
+            <div class="title">OPERAZIONI SUI DISCHI</div>
+            <div class="filtro">
+                <div class="filtro-list">
+                    <dl class="filtro-info list-group list-group-flush">
+
+                        <dd class="flex justify-between">
+                            <div class="filtro-title" style="font-weight: bold; width: 4rem; text-align: center">
+                                <span class="filtro-title-text">INPUT</span>
+                            </div>
+                            <div class="filtro-icon" style="font-weight: bold; width: 13rem; text-align: center">
+                                OPERAZIONE
+                            </div>
+                        </dd>
+                        <dd class="flex justify-between">
+                            <input class="input-small" type="number" min="1" name="getDischiCollezione"
+                                   id="getDischiCollezione">
+                            <button class="btn btn-primary btn-w-fixed"
+                                    onclick="getDischiCollezione($('#getDischiCollezione').val())">
+                                getDischiCollezione
+                            </button>
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+        <!--END OPERAZIONI SUI DISCHI-->
+        <!--TABELLA DISCHI-->
+        <div class="tables-container">
+            <div class="table-container" id="dischi-container">
+                <div class="title flex justify-between align-items-center">
+                    DISCHI
+                </div>
+                <div class="table-scrollable">
+                    <table class="table table-borderless table-striped">
+                        <thead class="table-dark">
+                        <tr>
+                            <th scope="col">Id</th>
+                            <th scope="col">Titolo</th>
+                            <th scope="col">Barcode</th>
+                            <th scope="col">Etichetta</th>
+                            <th scope="col">Anno</th>
+                            <th scope="col">Genere
+                            <th scope="col">Formato</th>
+                            <th scope="col">Stato conservazione</th>
+                            <th scope="col">Data inserimento</th>
+                        </tr>
+                        </thead>
+                        <tbody id="dischi-result">
+
+                        </tbody>
+                    </table>
+                    <div class="table-empty" id="dischi-empty">Non ci sono dischi.</div>
+                </div>
+            </div>
+            <!--END TABELLA DISCHI-->
+        </div>
+    </div>
+</div>
 
 </body>
 
@@ -160,8 +313,14 @@
     <script src="assets/js/utility.js"></script>
     <!-- SCRIPTS PER L'AUTENTICAZIONE -->
     <script src="assets/js/auth.js"></script>
+    <!-- SCRIPTS PER LE TAB -->
+    <script src="assets/js/tab.js"></script>
     <!-- SCRIPTS PER LE COLLEZIONI -->
     <script src="assets/js/collezioni.js"></script>
+    <!-- SCRIPTS PER GLI AUTORI -->
+    <script src="assets/js/autori.js"></script>
+    <!-- SCRIPTS PER I DISCHI -->
+    <script src="assets/js/dischi.js"></script>
 
     <!-- END SCRIPT -->
 </footer>

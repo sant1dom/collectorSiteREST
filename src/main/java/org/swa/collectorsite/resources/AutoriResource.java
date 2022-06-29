@@ -41,7 +41,7 @@ public class AutoriResource {
     @GET
     @Produces("application/json")
     public Response getAutori(@Context UriInfo uriinfo) throws SQLException {
-        PreparedStatement sAutori = con.prepareStatement("SELECT id FROM autore");
+        PreparedStatement sAutori = con.prepareStatement("SELECT id FROM autore ORDER BY id");
         List<String> autori = new ArrayList<>();
         try (ResultSet rs = sAutori.executeQuery()) {
             while (rs.next()) {
@@ -82,7 +82,7 @@ public class AutoriResource {
         try (PreparedStatement sDischiAutore = con.prepareStatement("SELECT * FROM disco " +
                 "JOIN disco_autore ON disco.id = disco_autore.disco_id " +
                 "JOIN collezione_disco cd on disco.id = cd.disco_id " +
-                "JOIN collezione c on cd.collezione_id = c.id WHERE disco_autore.autore_id = ? AND c.privacy = 'PUBBLICO'")) {
+                "JOIN collezione c on cd.collezione_id = c.id WHERE disco_autore.autore_id = ? AND c.privacy = 'PUBBLICO' ORDER BY id")) {
 
             sDischiAutore.setInt(1, id);
             try (ResultSet rs = sDischiAutore.executeQuery()) {

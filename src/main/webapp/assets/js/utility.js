@@ -6,19 +6,28 @@ function toggleVisibility(elem) {
     }
 }
 
-function handleError(request, status, error) {
+function message (message, type) {
+    const message_span = $('#message');
+    message_span.html(message);
+    if (type === 'error') {
+        message_span.css('color', 'red');
+    } else {
+        message_span.css('color', 'green');
+    }
+}
+
+function handleError(request, status, error, table) {
     switch (request.status) {
         case 404:
-            collezione_empty.show();
-            collezione_empty.text("Collezione inesistente");
+            table.show();
+            table.text("Elemento non presente.");
             break;
         case 401:
-            collezione_empty.show();
-            collezione_empty.text("Non sei autorizzato a visualizzare questa collezione");
+            table.show();
+            table.text("Non sei autorizzato.");
             break;
         default:
-            collezione_empty.show();
-            collezione_empty.text("Errore generico");
-
+            table.show();
+            table.text("Errore generico");
     }
 }

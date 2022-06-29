@@ -46,7 +46,7 @@ public class DischiResource {
     @GET
     @Produces("application/json")
     public Response getDischi(@Context UriInfo uriinfo) throws SQLException {
-        PreparedStatement sDischi = con.prepareStatement("SELECT disco.id FROM disco JOIN collezione_disco cd on disco.id = cd.disco_id JOIN collezione c on cd.collezione_id = c.id WHERE c.privacy = 'PUBBLICA'");
+        PreparedStatement sDischi = con.prepareStatement("SELECT disco.id FROM disco JOIN collezione_disco cd on disco.id = cd.disco_id JOIN collezione c on cd.collezione_id = c.id WHERE c.privacy = 'PUBBLICA'ORDER BY disco.id");
         List<String> dischi = new ArrayList<>();
         try (ResultSet rs = sDischi.executeQuery()) {
             while (rs.next()) {
