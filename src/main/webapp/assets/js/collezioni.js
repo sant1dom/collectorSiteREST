@@ -104,6 +104,7 @@ function getCollezioni(data) {
     }
 }
 
+
 function populateCollezione (data) {
     if (data) {
         collezione_result.show();
