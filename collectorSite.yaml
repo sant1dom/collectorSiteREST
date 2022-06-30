@@ -141,14 +141,14 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Disco'
+                  $ref: '#/components/schemas/DiscoGet'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
         '500':
           $ref: '#/components/responses/GeneralError'
         '404':
           $ref: '#/components/responses/NotFoundError'
-  #5
+  #5#
   '/rest/collezioni/{id_collezione}/dischi/{id_disco}':
     get:
       operationId: getDiscoCollezione
@@ -173,7 +173,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Disco'
+                $ref: '#/components/schemas/DiscoGet'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
         '500':
@@ -200,7 +200,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Disco'
+              $ref: '#/components/schemas/DiscoPostPut'
       responses:
         '204':
           description: no content
@@ -228,7 +228,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Disco'
+              $ref: '#/components/schemas/DiscoPostPut'
       responses:
         '201':
           description: Aggiunto disco alla collezione
@@ -249,7 +249,7 @@ paths:
           $ref: '#/components/responses/GeneralError'
         '404':
           $ref: '#/components/responses/NotFoundError'
-  #7
+  #7#
   '/rest/collezioni/private/dischi':
     get:
         operationId: getDischiUtente
@@ -291,7 +291,7 @@ paths:
                   schema:
                       type: array
                       items:
-                        $ref: '#/components/schemas/Disco'
+                        $ref: '#/components/schemas/DiscoGet'
             '401':
               $ref: '#/components/responses/UnauthorizedError'
             '500':
@@ -342,13 +342,14 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Disco'
+                  $ref: '#/components/schemas/DiscoGet'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
         '500':
           $ref: '#/components/responses/GeneralError'
         '404':
           $ref: '#/components/responses/NotFoundError'
+          ##
   '/rest/collezioni/condivise/dischi':
     get:
       operationId: getDischiCondivisiUtente
@@ -390,14 +391,14 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Disco'
+                  $ref: '#/components/schemas/DiscoGet'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
         '500':
           $ref: '#/components/responses/GeneralError'
         '404':
           $ref: '#/components/responses/NotFoundError'
-  #8
+  #8#
   '/rest/autori':
     get:
       operationId: getAutori
@@ -415,7 +416,7 @@ paths:
                   $ref: '#/components/schemas/Autore'
         '500':
           $ref: '#/components/responses/GeneralError'
-  #9
+  #9#
   '/rest/autori/{id}':
     get:
       operationId: getAutore
@@ -438,6 +439,7 @@ paths:
           $ref: '#/components/responses/NotFoundError'
         '500':
           $ref: '#/components/responses/GeneralError'
+          ##
   '/rest/autori/{id}/dischi':
     get:
       operationId: getDischiByAutore
@@ -457,7 +459,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Disco'
+                  $ref: '#/components/schemas/DiscoGet'
         '500':
           $ref: '#/components/responses/GeneralError'
         '404':
@@ -713,6 +715,12 @@ components:
           type: string
           format: uri
           example: "http://localhost:8080/rest/disco/1"
+        autori:
+          type: array
+          items:
+            type: string
+            format: uri
+            example: "http://localhost:8080/rest/autore/1"
 
     DiscoPostPut:
       type: object
@@ -747,6 +755,12 @@ components:
           type: integer
           format: int32
           example: 1
+        autori:
+          type: array
+          items:
+            type: integer
+            format: int32
+            example: 1
 
     Autore:
         type: object

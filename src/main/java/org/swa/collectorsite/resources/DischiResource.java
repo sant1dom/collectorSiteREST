@@ -74,6 +74,19 @@ public class DischiResource {
                             .path(DischiResource.class)
                             .path(DischiResource.class, "getDisco")
                             .build(rs.getInt("padre")).toString());
+                    var autori = new ArrayList<>();
+                    try(PreparedStatement sAutori = con.prepareStatement("SELECT * FROM disco_autore WHERE disco_id = ?")){
+                        sAutori.setInt(1, id);
+                        try (ResultSet rsAutori = sAutori.executeQuery()) {
+                            while (rsAutori.next()) {
+                                autori.add(uriInfo.getBaseUriBuilder()
+                                        .path(AutoriResource.class)
+                                        .path(AutoriResource.class, "getAutore")
+                                        .build(rsAutori.getInt("autore_id")).toString());
+                            }
+                        }
+                    }
+                    disco.put("autori", autori);
                     return Response.ok(disco).build();
                 } else {
                     return Response.status(Response.Status.NOT_FOUND).build();

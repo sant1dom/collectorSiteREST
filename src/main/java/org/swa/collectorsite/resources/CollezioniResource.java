@@ -229,6 +229,7 @@ public class CollezioniResource {
                                   Map<String, Object> disco,
                                   @Context SecurityContext securityContext) {
         String query = "INSERT INTO disco (titolo, anno, barcode, etichetta, data_inserimento,genere, formato, stato_conservazione, utente_id, padre) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String add_autori = "INSERT INTO disco_autore (disco_id, autore_id) VALUES (?, ?)";
         try (PreparedStatement stmt = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, (String) disco.get("titolo"));
             stmt.setInt(2, (int) disco.get("anno"));
@@ -254,6 +255,18 @@ public class CollezioniResource {
                     stmt2.setInt(2, id_disco);
                     stmt2.executeUpdate();
                 }
+
+                try (PreparedStatement stmt3 = con.prepareStatement(add_autori)) {
+                    if (disco.get("autori") != null) {
+                        List<Integer> autori_id = (List<Integer>) disco.get("autori");
+                        for (Integer id : autori_id) {
+                            stmt3.setInt(1, id_disco);
+                            stmt3.setInt(2, id);
+                            stmt3.executeUpdate();
+                        }
+                    }
+                }
+
                 URI uri = uriinfo.getBaseUriBuilder().path("collezioni/" + id_collezione + "/dischi/" + id_disco).build();
                 return Response.created(uri).build();
             }
@@ -289,6 +302,20 @@ public class CollezioniResource {
                                                     .path(DischiResource.class)
                                                     .path(DischiResource.class, "getDisco")
                                                     .build(rs.getInt("padre")).toString());
+
+                                            var autori = new ArrayList<>();
+                                            try(PreparedStatement sAutori = con.prepareStatement("SELECT * FROM disco_autore WHERE disco_id = ?")){
+                                                sAutori.setInt(1, id_disco);
+                                                try (ResultSet rsAutori = sAutori.executeQuery()) {
+                                                    while (rsAutori.next()) {
+                                                        autori.add(uriInfo.getBaseUriBuilder()
+                                                                .path(AutoriResource.class)
+                                                                .path(AutoriResource.class, "getAutore")
+                                                                .build(rsAutori.getInt("autore_id")).toString());
+                                                    }
+                                                }
+                                            }
+                                            disco.put("autori", autori);
                                             return Response.ok(disco).build();
                                         } else {
                                             return Response.status(Response.Status.NOT_FOUND).build();
@@ -315,6 +342,19 @@ public class CollezioniResource {
                                                                 .path(DischiResource.class)
                                                                 .path(DischiResource.class, "getDisco")
                                                                 .build(rs.getInt("padre")).toString());
+                                                        var autori = new ArrayList<>();
+                                                        try(PreparedStatement sAutori = con.prepareStatement("SELECT * FROM disco_autore WHERE disco_id = ?")){
+                                                            sAutori.setInt(1, id_disco);
+                                                            try (ResultSet rsAutori = sAutori.executeQuery()) {
+                                                                while (rsAutori.next()) {
+                                                                    autori.add(uriInfo.getBaseUriBuilder()
+                                                                            .path(AutoriResource.class)
+                                                                            .path(AutoriResource.class, "getAutore")
+                                                                            .build(rsAutori.getInt("autore_id")).toString());
+                                                                }
+                                                            }
+                                                        }
+                                                        disco.put("autori", autori);
                                                         return Response.ok(disco).build();
                                                     } else {
                                                         return Response.status(Response.Status.NOT_FOUND).build();
@@ -342,6 +382,19 @@ public class CollezioniResource {
                                                 .path(DischiResource.class)
                                                 .path(DischiResource.class, "getDisco")
                                                 .build(rs.getInt("padre")).toString());
+                                        var autori = new ArrayList<>();
+                                        try(PreparedStatement sAutori = con.prepareStatement("SELECT * FROM disco_autore WHERE disco_id = ?")){
+                                            sAutori.setInt(1, id_disco);
+                                            try (ResultSet rsAutori = sAutori.executeQuery()) {
+                                                while (rsAutori.next()) {
+                                                    autori.add(uriInfo.getBaseUriBuilder()
+                                                            .path(AutoriResource.class)
+                                                            .path(AutoriResource.class, "getAutore")
+                                                            .build(rsAutori.getInt("autore_id")).toString());
+                                                }
+                                            }
+                                        }
+                                        disco.put("autori", autori);
                                         return Response.ok(disco).build();
                                     } else {
                                         return Response.status(Response.Status.NOT_FOUND).build();
@@ -368,6 +421,9 @@ public class CollezioniResource {
                                   @PathParam("id_disco") int id_disco, Map<String, Object> disco,
                                   @Context SecurityContext securityContext) {
         String query = "UPDATE disco SET titolo = ?, anno = ?, barcode = ?, etichetta = ?, genere = ?, formato = ?, stato_conservazione = ?, utente_id = ?, padre = ? WHERE id = ?";
+        String delete_relazione = "DELETE FROM disco_autore WHERE disco_id = ?";
+        String add_autori = "INSERT INTO disco_autore (disco_id, autore_id) VALUES (?, ?)";
+
         try (PreparedStatement stmt = con.prepareStatement(query)) {
             stmt.setString(1, (String) disco.get("titolo"));
             stmt.setInt(2, (int) disco.get("anno"));
@@ -384,12 +440,29 @@ public class CollezioniResource {
             }
             stmt.setInt(10, id_disco);
             stmt.executeUpdate();
+
+            try (PreparedStatement stmt2 = con.prepareStatement(delete_relazione)) {
+                stmt2.setInt(1, id_disco);
+                stmt2.executeUpdate();
+
+                try (PreparedStatement stmt3 = con.prepareStatement(add_autori)) {
+                    if (disco.get("autori") != null) {
+                        List<Integer> autori_id = (List<Integer>) disco.get("autori");
+                        for (Integer id : autori_id) {
+                            stmt3.setInt(1, id_disco);
+                            stmt3.setInt(2, id);
+                            stmt3.executeUpdate();
+                        }
+                    }
+                }
+            }
+
+
             return Response.status(Response.Status.NO_CONTENT).build();
         } catch (SQLException ex) {
             throw new RESTWebApplicationException(ex);
         }
     }
-
 
     // Operazione 2
     @GET
@@ -398,7 +471,6 @@ public class CollezioniResource {
     @Produces("application/json")
     public Response getCollezioniUtente(@Context UriInfo uriInfo, @Context SecurityContext securityContext) {
         List<String> collezioni = new ArrayList<>();
-
 
         try (PreparedStatement stmt = con.prepareStatement("SELECT id FROM collezione WHERE utente_id = ? ORDER BY id")) {
             return collezioniUriList(uriInfo, securityContext.getUserPrincipal().getName(), collezioni, stmt);
