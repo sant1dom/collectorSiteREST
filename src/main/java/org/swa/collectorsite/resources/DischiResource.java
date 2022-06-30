@@ -96,4 +96,25 @@ public class DischiResource {
             }
         }
     }
+
+    @GET
+    @Path("{id}/autori")
+    @Produces("application/json")
+    public Response getAutori(@PathParam("id") int id, @Context UriInfo uriInfo) throws SQLException {
+        try(PreparedStatement sAutori = con.prepareStatement("SELECT * FROM disco_autore WHERE disco_id = ?")){
+            sAutori.setInt(1, id);
+            try (ResultSet rsAutori = sAutori.executeQuery()) {
+                List<String> autori = new ArrayList<>();
+                while (rsAutori.next()) {
+                    autori.add(uriInfo.getBaseUriBuilder()
+                            .path(AutoriResource.class)
+                            .path(AutoriResource.class, "getAutore")
+                            .build(rsAutori.getInt("autore_id")).toString());
+                }
+                return Response.ok(autori).build();
+            } catch (SQLException e) {
+                throw new RESTWebApplicationException(e);
+            }
+        }
+    }
 }
