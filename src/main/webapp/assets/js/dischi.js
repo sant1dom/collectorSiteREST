@@ -30,6 +30,7 @@ function getDischiCollezione(val) {
 // prendi un disco di una collezione
 //#5 numerazione yml
 function getDiscoCollezione(id_c, id_d) {
+    message("", "");
     if (id_c && id_d) {
         $.ajax({
             url: "rest/collezioni/" + id_c + "/dischi/" + id_d,

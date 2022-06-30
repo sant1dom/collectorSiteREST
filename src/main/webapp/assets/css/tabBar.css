@@ -1,4 +1,5 @@
 .tab-bar {
+    margin-top: 2rem;
     padding-left: 3rem;
 }
 
@@ -13,5 +14,5 @@
 .tab-line {
     border: 1px solid #343a40;
     width: 100%;
-    margin-bottom: 2rem;
+
 }
