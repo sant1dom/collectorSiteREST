@@ -15,12 +15,16 @@ const dischi_empty = $('#dischi-empty');
 * @param {int} val - ID della collezione
 */
 function getDischiCollezione(val) {
+    message("", "");
+    clear();
+    toggleVisibility(dischi_container);
+
     if (val) {
-        message("", "");
         $.ajax({
             url: "rest/collezioni/" + val + "/dischi",
             method: "GET",
             success: function (data) {
+                dischi_result.children().remove();
                 getDischiUtility(data);
                 message("Dischi caricati con successo", "success");
             },
@@ -42,22 +46,26 @@ function getDischiCollezione(val) {
 */
 function getDiscoCollezione(c, d) {
     message("", "");
+    clear();
+    toggleVisibility(dischi_container);
+
     if (c && d) {
         $.ajax({
             url: "rest/collezioni/" + c + "/dischi/" + d,
             method: "GET",
             success: function (data) {
-                getDischiUtility(data);
+                dischi_result.children().remove();
+                populateDischi(data);
                 message("Disco caricato con successo", "success");
             },
             error: function (request, status, error) {
-                handleError(request, status, error, "#dischi", "errore nel caricamento del disco");
+                handleError(request, status, error, "#dischi", "Errore nel caricamento del disco");
             },
             cache: false,
         });
     } else {
-        handleError("", "", "", "#dischi", "input errato");
-
+        clear();
+        handleError("", "", "", "#dischi", "Input errato");
     }
 }
 
@@ -66,10 +74,14 @@ function getDiscoCollezione(c, d) {
 */
 function getDischiUtente() {
     message("", "");
+    clear();
+    toggleVisibility(dischi_container);
+
     $.ajax({
         url: "rest/collezioni/private/dischi",
         method: "GET",
         success: function (data) {
+            dischi_result.children().remove();
             getDischiUtility(data);
             message("Dischi caricati con successo", "success");
         },
@@ -80,13 +92,25 @@ function getDischiUtente() {
     });
 }
 
-//Dischi delle collezioni condivise con l'utente
-function getDischiCondivisiUtente(){
+/*
+* 3. Dischi delle collezioni condivise con l'utente
+* 7. Ricerca di un disco tra le collezioni condivise con criteri di ricerca
+* @param {string} titolo - Titolo del disco
+* @param {string} anno - Anno di produzione del disco
+* @param {string} genere - Genere del disco
+* @param {string} formato - Artista del disco
+* @param {string} autore - Casa discografica del disco
+*/
+function getDischiCondivisiUtente(titolo, anno, genere, formato, autore) {
     message("", "");
+    clear();
+    toggleVisibility(dischi_container);
+
     $.ajax({
-        url: "rest/collezioni/condivise/dischi",
+        url: "rest/collezioni/condivise/dischi?titolo=" + titolo + "&anno=" + anno + "&genere=" + genere + "&formato=" + formato + "&autore=" + autore,
         method: "GET",
         success: function (data) {
+            dischi_result.children().remove();
             getDischiUtility(data);
             message("Dischi caricati con successo", "success");
         },
@@ -95,7 +119,34 @@ function getDischiCondivisiUtente(){
         },
         cache: false,
     });
+}
 
+/*
+* 7. Ricerca di un disco tra le collezioni pubbliche con criteri di ricerca
+* @param {string} titolo - Titolo del disco
+* @param {string} anno - Anno di produzione del disco
+* @param {string} genere - Genere del disco
+* @param {string} formato - Artista del disco
+* @param {string} autore - Casa discografica del disco
+*/
+function ricercaDiscoCollezioniPubbliche(titolo, anno, genere, formato, autore) {
+    message("", "");
+    clear();
+    toggleVisibility(dischi_container);
+
+    $.ajax({
+        url: "/rest/collezioni/dischi?titolo=" + titolo + "&anno=" + anno + "&genere=" + genere + "&formato=" + formato + "&autore=" + autore,
+        method: "GET",
+        success: function (data) {
+            dischi_result.children().remove();
+            getDischiUtility(data);
+            message("Dischi caricati con successo", "success");
+        },
+        error: function (request, status, error) {
+            handleError(request, status, error, "#dischi", "errore nel caricamento dei dischi");
+        },
+        cache: false,
+    });
 }
 
 /*
@@ -105,7 +156,7 @@ function getDischiCondivisiUtente(){
 function getDischiByAutore(val) {
     message("", "");
     clear();
-    toggleVisibility(autori_container);
+    toggleVisibility(dischi_container);
 
     if (val) {
         $.ajax({
@@ -127,37 +178,36 @@ function getDischiByAutore(val) {
     }
 }
 
+/*----------------------------------FUNZIONI UTILITY PER LE COLLEZIONI------------------------------------------------*/
 
-//Tutti i dischi
+/*
+* Funzione Utility per ottenere i dischi.
+* @param {List<URL>} data - Lista di URL dei dischi
+*/
 function getDischiUtility(data) {
-    if (data) {
-        dischi_result.children().remove();
-        $.each(data, function (key) {
-            $.ajax({
-                url: data[key],
-                method: "GET",
-                success: function (data) {
-                    populateDischi(data);
-                },
-                error: function (request, status, error) {
-                    handleError(request, status, error, dischi_empty);
-                },
-                cache: false,
-            });
-        })
-    } else {
-        dischi_result.children().remove();
-        dischi_empty.show();
-        dischi_empty.text("Non ci sono dischi.");
-    }
+    $.each(data, function (key) {
+        $.ajax({
+            url: data[key],
+            method: "GET",
+            success: function (data) {
+                populateDischi(data);
+            },
+            error: function (request, status, error) {
+                handleError(request, status, error, "#dischi", "Errore generico");
+            },
+            cache: false,
+        });
+    })
 }
 
-//Popolazione tabella dischi
+/*
+* Funzione Utility il riempimento della tabella delle collezioni
+* @param {Disco} data - Disco da inserire nella tabella
+*/
 function populateDischi(data) {
     if (data) {
         dischi_result.show();
         dischi_empty.hide();
-        dischi_empty.text("Non ci sono dischi.");
 
         dischi_result.append('<tr>')
         dischi_result.append('<td>' + data['id'] + '</td>')
@@ -167,12 +217,12 @@ function populateDischi(data) {
         dischi_result.append('<td>' + data['anno'] + '</td>')
         dischi_result.append('<td>' + data['genere'] + '</td>')
         dischi_result.append('<td>' + data['formato'] + '</td>')
-        dischi_result.append('<td>' + data['stato_conservazione'] + '</td>')
+        dischi_result.append('<td>' + (data['stato_conservazione'] === '' || data['stato_conservazione'] == null ? "-" : data['stato_conservazione']) + '</td>')
         dischi_result.append('<td>' + data['data_inserimento'] + '</td>')
         dischi_result.append('</tr>')
     } else {
         dischi_result.children().remove();
         dischi_empty.show();
-        dischi_empty.text("Non ci sono dischi.");
     }
+    dischi_empty.text("Non ci sono dischi.");
 }

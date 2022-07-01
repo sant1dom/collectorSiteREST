@@ -190,6 +190,8 @@ function discoForm(op) {
         if (id_collezione_add.val() === '') {
             message('Inserire tutti i campi obbligatori.', 'error')
             return;
+        } else if (checkCollezione(id_collezione_add.val()) === false) {
+            return;
         }
         //Mostra la form per creare e aggiungere un disco alla collezione specificata
         toggleVisibility(add_disco_collezione_form);
@@ -199,6 +201,8 @@ function discoForm(op) {
     } else if (op === 'update') { //UPDATE DEL DISCO IN UNA COLLEZIONE
         if (id_collezione_update.val() === '' || id_disco_update.val() === '') {
             message('Inserire tutti i campi obbligatori.', 'error')
+            return;
+        } else if (checkDiscoCollezione(id_collezione_update.val(), id_disco_update.val()) === false) {
             return;
         }
         //Mostra la form per aggiornare un disco della collezione specificata
@@ -273,6 +277,7 @@ function populateDiscoCollezioneUpdateForm() {
     });
 }
 
+
 /*
 * Funzione Utility per Ottenere le collezioni
 * @param {List<URL>} data - Lista di URL delle collezioni
@@ -298,7 +303,6 @@ function getCollezioniUtility(data) {
 * @param {Collezione} data - Collezione da inserire nella tabella
 */
 function populateCollezione(data) {
-
     if (data) {
         //Se la collezione non è vuota viene inserita nella tabella.
         collezione_result.show();
@@ -334,6 +338,8 @@ $('#formato_add').on('change', function () {
 
 /*
 * Utility che disabilita il campo statoConservazione se il formato è digitale
+* @param {Selectpicker} statoConservazione - Il campo statoConservazione da disabilitare
+* @param {Option} selected - L'opzione selezionata in formato
 */
 function disableStatoConservazione(statoConservazione, selected) {
     if (selected.val() === 'DIGITALE') {

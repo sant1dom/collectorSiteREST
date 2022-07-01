@@ -93,3 +93,69 @@ function clear() {
     dischi_container.css('display', 'none');
     dischi_result.hide();
 }
+
+
+/*
+* Utility che controlla l'esistenza o le autorizzazioni per una collezione
+* @param {int} c - Id della collezione
+* @return {boolean} - True se l'utente ha i permessi per accedere alla collezione e la collezione esiste, false altrimenti
+*/
+function checkCollezione(c) {
+    let exist;
+    $.ajax({
+        url: "rest/collezioni/" + c,
+        async: false,
+        method: "GET",
+        success: function () {
+            exist = true;
+        },
+        error: function (request, status, error) {
+            switch (request.status) {
+                case 404:
+                    message("Collezione non trovata.", "error");
+                    break;
+                case 401:
+                    message("Non sei autorizzato a visualizzare questa collezione.", "error");
+                    break;
+                default:
+                    message("Errore nel caricamento della collezione.", "error");
+            }
+            exist = false;
+        },
+        cache: false,
+    });
+    return exist;
+}
+
+/*
+* Utility che controlla l'esistenza o le autorizzazioni per un disco di una collezione
+* @param {int} c - Id della collezione
+* @param {int} d - Id del disco
+* @return {boolean} - True se l'utente ha i permessi per accedere alla collezione e al disco, false altrimenti
+*/
+function checkDiscoCollezione(c, d) {
+    let exist;
+    $.ajax({
+        url: "rest/collezioni/" + c + "/dischi/" + d,
+        async: false,
+        method: "GET",
+        success: function () {
+            exist = true;
+        },
+        error: function (request, status, error) {
+            switch (request.status) {
+                case 404:
+                    message("Disco non trovato o non appartenente alla collezione.", "error");
+                    break;
+                case 401:
+                    message("Non sei autorizzato a visualizzare questa collezione.", "error");
+                    break;
+                default:
+                    message("Errore nel caricamento del disco.", "error");
+            }
+            exist = false;
+        },
+        cache: false,
+    });
+    return exist;
+}

@@ -83,6 +83,7 @@
     <button class="btn btn-warning tab-btn" id="tab-collezioni-btn">Collezioni</button>
     <button class="btn btn-dark tab-btn" id="tab-autori-btn">Autori</button>
     <button class="btn btn-dark tab-btn" id="tab-dischi-btn">Dischi</button>
+    <button class="btn btn-dark tab-btn" id="tab-statistiche-btn">Statistiche</button>
 </div>
 <div class="tab-line"></div>
 
@@ -99,13 +100,19 @@
                 <div class="filtro-list">
                     <dl class="filtro-info list-group list-group-flush">
                         <dd>
-                            <button class="btn btn-success btn-w-fixed" onclick="getCollezioniUtente()">getCollezioniUtente</button>
+                            <button class="btn btn-success btn-w-fixed" onclick="getCollezioniUtente()">
+                                getCollezioniUtente
+                            </button>
                         </dd>
                         <dd>
-                            <button class="btn btn-success btn-w-fixed" onclick="getCollezioniCondivise()">getCollezioniCondivise</button>
+                            <button class="btn btn-success btn-w-fixed" onclick="getCollezioniCondivise()">
+                                getCollezioniCondivise
+                            </button>
                         </dd>
                         <dd>
-                            <button class="btn btn-primary btn-w-fixed" onclick="toggleVisibility($('#getCollezione_form'))">getCollezione</button>
+                            <button class="btn btn-primary btn-w-fixed"
+                                    onclick="toggleVisibility($('#getCollezione_form'))">getCollezione
+                            </button>
                             <div class="hidden" id="getCollezione_form">
                                 <div class="horizontal-separator filtro-horizontal-separator"></div>
                                 <div class="flex justify-between">
@@ -123,7 +130,9 @@
                             </div>
                         </dd>
                         <dd>
-                            <button class="btn btn-primary btn-w-fixed" onclick="toggleVisibility($('#addDiscoCollezione_form_1'))">addDiscoCollezione</button>
+                            <button class="btn btn-primary btn-w-fixed"
+                                    onclick="toggleVisibility($('#addDiscoCollezione_form_1'))">addDiscoCollezione
+                            </button>
                             <div class="hidden" id="addDiscoCollezione_form_1">
                                 <div class="horizontal-separator filtro-horizontal-separator"></div>
                                 <div class="flex justify-between">
@@ -141,7 +150,9 @@
                             </div>
                         </dd>
                         <dd>
-                            <button class="btn btn-primary btn-w-fixed" onclick="toggleVisibility($('#updateDiscoCollezione_form_1'))">updateDiscoCollezione</button>
+                            <button class="btn btn-primary btn-w-fixed"
+                                    onclick="toggleVisibility($('#updateDiscoCollezione_form_1'))">updateDiscoCollezione
+                            </button>
                             <div class="hidden" id="updateDiscoCollezione_form_1">
                                 <div class="horizontal-separator filtro-horizontal-separator"></div>
                                 <div class="flex justify-between">
@@ -205,28 +216,33 @@
                         <div class="form-container flex justify-between flex-wrap">
                             <div class="form-group" style="width: 40%;">
                                 <label for="titolo_update">Titolo:</label>
-                                <input type="text" class="form-control" id="titolo_update" name="titolo" placeholder="Titolo" required>
+                                <input type="text" class="form-control" id="titolo_update" name="titolo"
+                                       placeholder="Titolo" required>
                             </div>
 
                             <div class="form-group" style="width: 20%;">
                                 <label for="anno_update">Anno:</label>
-                                <input type="number" class="form-control" id="anno_update" name="anno" placeholder="anno" required>
+                                <input type="number" class="form-control" id="anno_update" name="anno"
+                                       placeholder="anno" required>
                             </div>
 
                             <div class="form-group" style="width: 20%;">
                                 <label for="barcode_update">Barcode:</label>
-                                <input type="text" class="form-control" id="barcode_update" name="barcode" placeholder="Barcode">
+                                <input type="text" class="form-control" id="barcode_update" name="barcode"
+                                       placeholder="Barcode">
                             </div>
 
                             <div class="form-group" style="width: 20%;">
                                 <label for="etichetta_update">Etichetta:</label>
-                                <input type="text" class="form-control" id="etichetta_update" name="etichetta" placeholder="Etichetta" required>
+                                <input type="text" class="form-control" id="etichetta_update" name="etichetta"
+                                       placeholder="Etichetta" required>
                             </div>
                         </div>
                         <div class="form-container flex justify-between flex-wrap">
                             <div class="form-group" style="width: 33%;">
                                 <label for="genere_update">Genere:</label>
-                                <select class="selectpicker" id="genere_update" name="genere" data-live-search="true" required>
+                                <select class="selectpicker" id="genere_update" name="genere" data-live-search="true"
+                                        required>
                                     <option selected value="">Scegli un genere</option>
                                     <option value="POP">POP</option>
                                     <option value="ROCK">ROCK</option>
@@ -245,7 +261,8 @@
                             </div>
                             <div class="form-group" style="width: 33%;">
                                 <label for="formato_update">Formato:</label>
-                                <select class="selectpicker" id="formato_update" name="formato" data-live-search="true" required>
+                                <select class="selectpicker" id="formato_update" name="formato" data-live-search="true"
+                                        required>
                                     <option selected value="">Scegli un formato</option>
                                     <option value="CD">CD</option>
                                     <option value="VINILE">VINILE</option>
@@ -254,7 +271,8 @@
                             </div>
                             <div class="form-group" style="width: 33%;">
                                 <label for="statoConservazione_update">Stato di conservazione:</label>
-                                <select class="selectpicker" id="statoConservazione_update" name="statoConservazione" data-live-search="true" required>
+                                <select class="selectpicker" id="statoConservazione_update" name="statoConservazione"
+                                        data-live-search="true" required>
                                     <option selected value="">Scegli uno stato di conservazione</option>
                                     <option value="NUOVO">NUOVO</option>
                                     <option value="BUONO">BUONO</option>
@@ -268,13 +286,15 @@
                         <div class="form-container flex justify-center flex-wrap">
                             <div class="form-group">
                                 <label for="autore_update">Autori:</label>
-                                <select class="selectpicker" id="autore_update" name="autore" multiple data-live-search="true" required>
+                                <select class="selectpicker" id="autore_update" name="autore" multiple
+                                        data-live-search="true" required>
                                     <option value="">Scegli un autore</option>
                                 </select>
                             </div>
                         </div>
                         <div class="flex justify-center align-items-center pt-3">
-                            <button class="btn btn-success" onclick="updateDiscoCollezione($('#updateDiscoCollezione_c').val(), $('#updateDiscoCollezione_d').val())">
+                            <button class="btn btn-success"
+                                    onclick="updateDiscoCollezione($('#updateDiscoCollezione_c').val(), $('#updateDiscoCollezione_d').val())">
                                 SALVA
                             </button>
                         </div>
@@ -293,17 +313,20 @@
                         <div class="form-container flex justify-between flex-wrap">
                             <div class="form-group" style="width: 40%;">
                                 <label for="titolo_add">Titolo:</label>
-                                <input type="text" class="form-control" id="titolo_add" name="titolo" placeholder="Titolo" required>
+                                <input type="text" class="form-control" id="titolo_add" name="titolo"
+                                       placeholder="Titolo" required>
                             </div>
 
                             <div class="form-group" style="width: 20%;">
                                 <label for="anno_add">Anno:</label>
-                                <input type="number" class="form-control"  id="anno_add" name="anno" placeholder="anno" required>
+                                <input type="number" class="form-control" id="anno_add" name="anno" placeholder="anno"
+                                       required>
                             </div>
 
                             <div class="form-group" style="width: 20%;">
                                 <label for="barcode_add">Barcode:</label>
-                                <input type="text" class="form-control" value="" id="barcode_add" name="barcode" placeholder="Barcode">
+                                <input type="text" class="form-control" value="" id="barcode_add" name="barcode"
+                                       placeholder="Barcode">
                             </div>
 
                             <div class="form-group" style="width: 20%;">
@@ -315,7 +338,8 @@
                         <div class="form-container flex justify-between flex-wrap">
                             <div class="form-group" style="width: 33%;">
                                 <label for="genere_add">Genere:</label>
-                                <select  class="selectpicker" data-live-search="true" id="genere_add" name="genere" required>
+                                <select class="selectpicker" data-live-search="true" id="genere_add" name="genere"
+                                        required>
                                     <option selected value="">Scegli un genere</option>
                                     <option value="POP">POP</option>
                                     <option value="ROCK">ROCK</option>
@@ -334,7 +358,8 @@
                             </div>
                             <div class="form-group" style="width: 33%;">
                                 <label for="formato_add">Formato:</label>
-                                <select id="formato_add" name="formato" class="selectpicker" data-live-search="true" required>
+                                <select id="formato_add" name="formato" class="selectpicker" data-live-search="true"
+                                        required>
                                     <option selected value="">Scegli un formato</option>
                                     <option value="CD">CD</option>
                                     <option value="VINILE">VINILE</option>
@@ -343,7 +368,8 @@
                             </div>
                             <div class="form-group" style="width: 33%;">
                                 <label for="statoConservazione_add">Stato di conservazione:</label>
-                                <select id="statoConservazione_add" name="statoConservazione" class="selectpicker" data-live-search="true" required>
+                                <select id="statoConservazione_add" name="statoConservazione" class="selectpicker"
+                                        data-live-search="true" required>
                                     <option selected value="">Scegli uno stato di conservazione</option>
                                     <option value="NUOVO">NUOVO</option>
                                     <option value="BUONO">BUONO</option>
@@ -357,13 +383,15 @@
                         <div class="form-container flex justify-center flex-wrap">
                             <div class="form-group">
                                 <label for="autore_add">Autori:</label>
-                                <select id="autore_add" name="autore" class="selectpicker" multiple data-live-search="true" required>
+                                <select id="autore_add" name="autore" class="selectpicker" multiple
+                                        data-live-search="true" required>
                                     <option value="">Scegli un autore</option>
                                 </select>
                             </div>
                         </div>
                         <div class="flex justify-center align-items-center pt-3">
-                            <button class="btn btn-success" onclick="addDiscoCollezione($('#addDiscoCollezione_c').val())">
+                            <button class="btn btn-success"
+                                    onclick="addDiscoCollezione($('#addDiscoCollezione_c').val())">
                                 SALVA
                             </button>
                         </div>
@@ -387,7 +415,8 @@
                             <button class="btn btn-success btn-w-fixed" onclick="getAutori()">getAutori</button>
                         </dd>
                         <dd>
-                            <button class="btn btn-primary btn-w-fixed" onclick="toggleVisibility($('#getAutore_form'))">
+                            <button class="btn btn-primary btn-w-fixed"
+                                    onclick="toggleVisibility($('#getAutore_form'))">
                                 getAutore
                             </button>
                             <div class="hidden" id="getAutore_form">
@@ -448,42 +477,165 @@
             <div class="filtro">
                 <div class="filtro-list">
                     <dl class="filtro-info list-group list-group-flush">
-
-                        <dd class="flex justify-between">
-                            <div class="filtro-title" style="font-weight: bold; width: 4rem; text-align: center">
-                                <span class="filtro-title-text">INPUT</span>
-                            </div>
-                            <div class="filtro-icon" style="font-weight: bold; width: 13rem; text-align: center">
-                                OPERAZIONE
-                            </div>
+                        <dd>
+                            <button class="btn btn-success btn-w-fixed" onclick="getDischiUtente()">getDischiUtente
+                            </button>
                         </dd>
-                        <dd class="flex justify-between">
-                            <input class="input-small" type="number" min="1" name="getDischiCollezione"
-                                   id="getDischiCollezione">
+                        <dd>
                             <button class="btn btn-primary btn-w-fixed"
-                                    onclick="getDischiCollezione($('#getDischiCollezione').val())">
-                                getDischiCollezione
-                            </button>
-                        </dd>
-                        <dd class="flex justify-between">
-                            <input class="input-small" type="number" min="1" name="getDiscoCollezione_c"
-                                   id=getDiscoCollezione_c" placeholder="id collezione">
-                            <input class="input-small" type="number" min="1" name="getDiscoCollezione_d"
-                                   id="getDiscoCollezione_d" placeholder="id disco">
-                            <button class="btn btn-primary btn-w-fixed"
-                                    onclick="getDiscoCollezione($('#getDiscoCollezione_c').val(), $('#getDiscoCollezione_d').val())">
-                                getDiscoCollezione
-                            </button>
-                        </dd>
-                        <dd class="flex justify-end">
-                            <button class="btn btn-primary btn-w-fixed" onclick="getDischiUtente()">
-                                getDischiUtente
-                            </button>
-                        </dd>
-                        <dd class="flex justify-end">
-                            <button class="btn btn-primary btn-w-fixed" onclick="getDischiCondivisiUtente()">
+                                    onclick="toggleVisibility($('#getDischiCondivisiUtente_form'))">
                                 getDischiCondivisiUtente
                             </button>
+                            <div class="hidden" id="getDischiCondivisiUtente_form">
+                                <div class="horizontal-separator filtro-horizontal-separator"></div>
+                                <div class="flex justify-between">
+                                    <label for="titolo_filtro_condiviso">Titolo</label>
+                                    <input class="input-small" value="" type="text" name="titolo"
+                                           id="titolo_filtro_condiviso">
+                                </div>
+                                <div class="flex justify-between mt-1">
+                                    <label for="anno_filtro_condiviso">Anno</label>
+                                    <input class="input-small" value="" type="number" min="1" name="anno"
+                                           id="anno_filtro_condiviso">
+                                </div>
+                                <div class="flex justify-between mt-1">
+                                    <label for="genere_filtro_condiviso">Genere</label>
+                                    <input class="input-small" value="" type="text" name="genere"
+                                           id="genere_filtro_condiviso">
+                                </div>
+                                <div class="flex justify-between mt-1">
+                                    <label for="formato_filtro_condiviso">Formato</label>
+                                    <input class="input-small" value="" type="text" name="formato"
+                                           id="formato_filtro_condiviso">
+                                </div>
+                                <div class="flex justify-between mt-1">
+                                    <label for="autore_filtro_condiviso">Autore</label>
+                                    <input class="input-small" value="" type="text" name="autore"
+                                           id="autore_filtro_condiviso">
+                                </div>
+                                <div class="flex justify-center mt-3" style="width: 100%;">
+                                    <button class="btn btn-warning"
+                                            onclick="getDischiCondivisiUtente(
+                                        $('#titolo_filtro_condiviso').val(),
+                                        $('#anno_filtro_condiviso').val(),
+                                        $('#genere_filtro_condiviso').val(),
+                                        $('#formato_filtro_condiviso').val(),
+                                        $('#autore_filtro_condiviso').val())">
+                                        Trova
+                                    </button>
+                                </div>
+                                <div class="horizontal-separator filtro-horizontal-separator"></div>
+                            </div>
+                        </dd>
+                        <dd>
+                            <button class="btn btn-primary btn-w-fixed"
+                                    onclick="toggleVisibility($('#ricercaDiscoCollezioniPubbliche_form'))">
+                                ricercaDiscoCollezioniPubbliche
+                            </button>
+                            <div class="hidden" id="ricercaDiscoCollezioniPubbliche_form">
+                                <div class="horizontal-separator filtro-horizontal-separator"></div>
+                                <div class="flex justify-between">
+                                    <label for="titolo_filtro_condiviso">Titolo</label>
+                                    <input class="input-small" value="" type="text" name="titolo"
+                                           id="titolo_filtro_pubblico">
+                                </div>
+                                <div class="flex justify-between mt-1">
+                                    <label for="anno_filtro_pubblico">Anno</label>
+                                    <input class="input-small" value="" type="number" min="1" name="anno"
+                                           id="anno_filtro_pubblico">
+                                </div>
+                                <div class="flex justify-between mt-1">
+                                    <label for="genere_filtro_pubblico">Genere</label>
+                                    <input class="input-small" value="" type="text" name="genere"
+                                           id="genere_filtro_pubblico">
+                                </div>
+                                <div class="flex justify-between mt-1">
+                                    <label for="formato_filtro_pubblico">Formato</label>
+                                    <input class="input-small" value="" type="text" name="formato"
+                                           id="formato_filtro_pubblico">
+                                </div>
+                                <div class="flex justify-between mt-1">
+                                    <label for="autore_filtro_pubblico">Autore</label>
+                                    <input class="input-small" value="" type="text" name="autore"
+                                           id="autore_filtro_pubblico">
+                                </div>
+                                <div class="flex justify-center mt-3" style="width: 100%;">
+                                    <button class="btn btn-warning"
+                                            onclick="ricercaDiscoCollezioniPubbliche(
+                                        $('#titolo_filtro_pubblico').val(),
+                                        $('#anno_filtro_pubblico').val(),
+                                        $('#genere_filtro_pubblico').val(),
+                                        $('#formato_filtro_pubblico').val(),
+                                        $('#autore_filtro_pubblico').val())">
+                                        Trova
+                                    </button>
+                                </div>
+                                <div class="horizontal-separator filtro-horizontal-separator"></div>
+                            </div>
+                        </dd>
+                        <dd>
+                            <button class="btn btn-primary btn-w-fixed"
+                                    onclick="toggleVisibility($('#getDischiCollezione_form'))">getDischiCollezione
+                            </button>
+                            <div class="hidden" id="getDischiCollezione_form">
+                                <div class="horizontal-separator filtro-horizontal-separator"></div>
+                                <div class="flex justify-between">
+                                    <label for="getDischiCollezione">ID collezione</label>
+                                    <input class="input-small" type="number" min="1" name="getDischiCollezione"
+                                           id="getDischiCollezione">
+                                </div>
+
+                                <div class="flex justify-center mt-3" style="width: 100%;">
+                                    <button onclick="getDischiCollezione($('#getDischiCollezione').val())"
+                                            class="btn btn-warning">Trova
+                                    </button>
+                                </div>
+                                <div class="horizontal-separator filtro-horizontal-separator"></div>
+                            </div>
+                        </dd>
+                        <dd>
+                            <button class="btn btn-primary btn-w-fixed"
+                                    onclick="toggleVisibility($('#getDiscoCollezione_form'))">getDiscoCollezione
+                            </button>
+                            <div class="hidden" id="getDiscoCollezione_form">
+                                <div class="horizontal-separator filtro-horizontal-separator"></div>
+                                <div class="flex justify-between">
+                                    <label for="getDiscoCollezione_c">ID collezione</label>
+                                    <input class="input-small" type="number" min="1" name="getDiscoCollezione_c"
+                                           id="getDiscoCollezione_c">
+                                </div>
+                                <div class="flex justify-between mt-1">
+                                    <label for="getDiscoCollezione_d">ID disco</label>
+                                    <input class="input-small" type="number" min="1" name="getDiscoCollezione_d"
+                                           id="getDiscoCollezione_d">
+                                </div>
+                                <div class="flex justify-center mt-3" style="width: 100%;">
+                                    <button onclick="getDiscoCollezione($('#getDiscoCollezione_c').val(), $('#getDiscoCollezione_d').val())"
+                                            class="btn btn-warning">Trova
+                                    </button>
+                                </div>
+                                <div class="horizontal-separator filtro-horizontal-separator"></div>
+                            </div>
+                        </dd>
+                        <dd>
+                            <button class="btn btn-primary btn-w-fixed"
+                                    onclick="toggleVisibility($('#getDischiByAutore_form'))">getDischiByAutore
+                            </button>
+                            <div class="hidden" id="getDischiByAutore_form">
+                                <div class="horizontal-separator filtro-horizontal-separator"></div>
+                                <div class="flex justify-between">
+                                    <label for="getDischiByAutore">ID autore</label>
+                                    <input class="input-small" type="number" min="1" name="getDischiByAutore"
+                                           id="getDischiByAutore">
+                                </div>
+
+                                <div class="flex justify-center mt-3" style="width: 100%;">
+                                    <button onclick="getDischiByAutore($('#getDischiByAutore').val())"
+                                            class="btn btn-warning">Trova
+                                    </button>
+                                </div>
+                                <div class="horizontal-separator filtro-horizontal-separator"></div>
+                            </div>
                         </dd>
                     </dl>
                 </div>
@@ -520,6 +672,36 @@
             </div>
             <!--END TABELLA DISCHI-->
         </div>
+    </div>
+</div>
+<div class="tab" id="tab-statistiche">
+    <div class="tabelle-filtro-container">
+        <div class="side-bar-container">
+            <!--OPERAZIONI SULLE STATISTICHE-->
+            <div class="title">STATISTICHE</div>
+            <div class="filtro">
+                <div class="filtro-list">
+                    <dl class="filtro-info list-group list-group-flush">
+                        <dd class="flex justify-end">
+                            <button class="btn btn-success btn-w-fixed" onclick=""></button>
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+            <!--END OPERAZIONI SULLE STATISTICHE-->
+        </div>
+        <!--STATISTICHE-->
+        <div class="tables-container">
+            <div class="table-container" id="statistiche-container">
+                <div class="title flex justify-between align-items-center">
+                    RISULTATI
+                </div>
+                <div>
+
+                </div>
+            </div>
+        </div>
+        <!--END STATISTICHE-->
     </div>
 </div>
 
