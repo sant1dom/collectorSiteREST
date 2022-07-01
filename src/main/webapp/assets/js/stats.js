@@ -1,52 +1,51 @@
-const dischi_result = $("#dischi-result");
-const dischi_empty = $('#dischi-empty');
+const stats_result = $("#dischi-result");
+const stats_empty = $('#dischi-empty');
 
 $(document).ready(function () {
-    dischi_result.hide();
+    stats_result.hide();
 });
 
 
-//3. Elenco dischi in una collezione
-function getDischiCollezione(val) {
+//Numero di dischi per anno
+function getDischiPerAnno(val) {
     if (val) {
-        message("", "");
         $.ajax({
-            url: "rest/collezioni/" + val + "/dischi",
+            url: "rest/stats/dischi_per_anno/" + val,
             method: "GET",
             success: function (data) {
                 getDischiUtility(data);
-                message("Dischi caricati con successo", "success");
             },
             error: function (request, status, error) {
-                handleError(request, status, error, "#dischi", "errore nel caricamento dei dischi");
-
+                handleError(request, status, error, dischi_empty);
             },
             cache: false,
         });
     } else {
-        handleError("", "", "", "#dischi", "input errato");
+        dischi_result.children().remove();
+        dischi_empty.show();
+        dischi_empty.text("Non ci sono dischi.");
     }
 }
 
 // prendi un disco di una collezione
 //#5 numerazione yml
 function getDiscoCollezione(id_c, id_d) {
-    message("", "");
     if (id_c && id_d) {
         $.ajax({
             url: "rest/collezioni/" + id_c + "/dischi/" + id_d,
             method: "GET",
             success: function (data) {
                 getDischiUtility(data);
-                message("Disco caricato con successo", "success");
             },
             error: function (request, status, error) {
-                handleError(request, status, error, "#dischi", "errore nel caricamento del disco");
+                handleError(request, status, error, dischi_empty);
             },
             cache: false,
         });
     } else {
-        handleError("", "", "", "#dischi", "input errato");
+        dischi_result.children().remove();
+        dischi_empty.show();
+        dischi_empty.text("Disco non trovato nella collezione.");
 
     }
 }
@@ -54,16 +53,14 @@ function getDiscoCollezione(id_c, id_d) {
 // Dischi delle collezioni private dell'utente
 //#7 numerazione yml
 function getDischiUtente() {
-    message("", "");
     $.ajax({
         url: "rest/collezioni/private/dischi",
         method: "GET",
         success: function (data) {
             getDischiUtility(data);
-            message("Dischi caricati con successo", "success");
         },
         error: function (request, status, error) {
-            handleError(request, status, error, "#dischi", "errore nel caricamento dei dischi");
+            handleError(request, status, error, dischi_empty);
         },
         cache: false,
     });
@@ -71,16 +68,14 @@ function getDischiUtente() {
 
 //Dischi delle collezioni condivise con l'utente
 function getDischiCondivisiUtente(){
-    message("", "");
     $.ajax({
         url: "rest/collezioni/condivise/dischi",
         method: "GET",
         success: function (data) {
             getDischiUtility(data);
-            message("Dischi caricati con successo", "success");
         },
         error: function (request, status, error) {
-            handleError(request, status, error, "#dischi", "errore nel caricamento dei dischi");
+            handleError(request, status, error, dischi_empty);
         },
         cache: false,
     });

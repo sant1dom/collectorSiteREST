@@ -356,6 +356,26 @@
                                 getDischiCollezione
                             </button>
                         </dd>
+                        <dd class="flex justify-between">
+                            <input class="input-small" type="number" min="1" name="getDiscoCollezione_c"
+                                   id=getDiscoCollezione_c" placeholder="id collezione">
+                            <input class="input-small" type="number" min="1" name="getDiscoCollezione_d"
+                                   id="getDiscoCollezione_d" placeholder="id disco">
+                            <button class="btn btn-primary btn-w-fixed"
+                                    onclick="getDiscoCollezione($('#getDiscoCollezione_c').val(), $('#getDiscoCollezione_d').val())">
+                                getDiscoCollezione
+                            </button>
+                        </dd>
+                        <dd class="flex justify-end">
+                            <button class="btn btn-primary btn-w-fixed" onclick="getDischiUtente()">
+                                getDischiUtente
+                            </button>
+                        </dd>
+                        <dd class="flex justify-end">
+                            <button class="btn btn-primary btn-w-fixed" onclick="getDischiCondivisiUtente()">
+                                getDischiCondivisiUtente
+                            </button>
+                        </dd>
                     </dl>
                 </div>
             </div>

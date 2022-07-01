@@ -51,7 +51,7 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
         '500':
           $ref: '#/components/responses/GeneralError'
-  #2
+  #2 #
   '/rest/collezioni/all':
     get:
       operationId: getCollezioniPrivateUtente
@@ -72,7 +72,7 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
         '500':
           $ref: '#/components/responses/GeneralError'
-  #3
+  #3 #
   '/rest/collezioni/condivise':
     get:
       operationId: getCollezioniCondiviseUtente
@@ -93,7 +93,7 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
         '500':
           $ref: '#/components/responses/GeneralError'
-  #4
+  #4 #
   '/rest/collezioni/{id_collezione}':
     get:
       operationId: getCollezione
@@ -120,6 +120,7 @@ paths:
           $ref: '#/components/responses/GeneralError'
         '404':
           $ref: '#/components/responses/NotFoundError'
+  ##
   '/rest/collezioni/{id_collezione}/dischi':
     get:
       operationId: getDischiCollezione

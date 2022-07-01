@@ -8,14 +8,17 @@ $(document).ready(function () {
 
 //8. Elenco autori del sistema
 function getAutori() {
+    message("", "");
     $.ajax({
         url: "rest/autori",
         method: "GET",
         success: function (data) {
             getAutoriUtility(data);
+            message("Autori caricati con successo", "success");
         },
         error: function (request, status, error) {
             handleError(request, status, error, autori_empty);
+            message("Nessun autore trovato", "error");
         },
         cache: false,
     });
@@ -23,15 +26,18 @@ function getAutori() {
 
 function getAutore(val) {
     if (val) {
+        message("", "");
         $.ajax({
             url: "rest/autori/" + val,
             method: "GET",
             success: function (data) {
                 autori_result.children().remove();
                 populateAutori(data);
+                message("Autore caricato con successo", "success");
             },
             error: function (request, status, error) {
                 handleError(request, status, error, autori_empty);
+                message("Autore non trovato", "error");
             },
             cache: false,
         });

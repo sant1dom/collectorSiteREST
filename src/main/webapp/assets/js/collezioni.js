@@ -6,7 +6,7 @@ $(document).ready(function () {
 });
 
 
-//2: Elenco collezioni di un utente
+//2: Elenco collezioni private di un utente
 function getCollezioniUtente() {
     message("", "");
     $.ajax({
