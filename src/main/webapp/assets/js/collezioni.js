@@ -30,7 +30,7 @@ function getCollezioniUtente() {
             //data - lista di url di collezioni
             collezione_result.children().remove();
             if (data.length > 0) {
-                getCollezioni(data); //ottengo le collezioni e le inserisco nella tabella
+                getCollezioniUtility(data); //ottengo le collezioni e le inserisco nella tabella
                 message("Collezioni caricate.", "success");
             } else {
                 handleError("", "", "", "#collezione", "Non ci sono collezioni.");
@@ -58,7 +58,7 @@ function getCollezioniCondivise() {
             //data - lista di url di collezioni
             collezione_result.children().remove();
             if (data.length > 0) {
-                getCollezioni(data); //ottengo le collezioni e le inserisco nella tabella
+                getCollezioniUtility(data); //ottengo le collezioni e le inserisco nella tabella
                 message("Collezioni condivise caricate.", "success");
             } else {
                 handleError("", "", "", "#collezione", "Non ci sono collezioni condivise.");
@@ -273,12 +273,11 @@ function populateDiscoCollezioneUpdateForm() {
     });
 }
 
-
 /*
 * Funzione Utility per Ottenere le collezioni
 * @param {List<URL>} data - Lista di URL delle collezioni
 */
-function getCollezioni(data) {
+function getCollezioniUtility(data) {
     $.each(data, function (key) {
         $.ajax({
             url: "rest/collezioni/" + data[key].split("/")[6],

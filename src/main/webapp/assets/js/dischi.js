@@ -1,12 +1,19 @@
+/*
+* File per le operazioni sui dischi
+* @Author: Davide De Acetis
+* @Author: Raluca Mihaela Bujoreanu
+*/
+
+//DICHIARAZIONE SELETTORI
+const dischi_container = $("#dischi-container");
 const dischi_result = $("#dischi-result");
 const dischi_empty = $('#dischi-empty');
+//END DICHIARAZIONE SELETTORI
 
-$(document).ready(function () {
-    dischi_result.hide();
-});
-
-
-//3. Elenco dischi in una collezione
+/*
+* 3. Elenco dischi in una collezione
+* @param {int} val - ID della collezione
+*/
 function getDischiCollezione(val) {
     if (val) {
         message("", "");
@@ -28,13 +35,16 @@ function getDischiCollezione(val) {
     }
 }
 
-// prendi un disco di una collezione
-//#5 numerazione yml
-function getDiscoCollezione(id_c, id_d) {
+/*
+* 5. Disco di una collezione
+* @param {int} d - ID del disco
+* @param {int} c - ID della collezione
+*/
+function getDiscoCollezione(c, d) {
     message("", "");
-    if (id_c && id_d) {
+    if (c && d) {
         $.ajax({
-            url: "rest/collezioni/" + id_c + "/dischi/" + id_d,
+            url: "rest/collezioni/" + c + "/dischi/" + d,
             method: "GET",
             success: function (data) {
                 getDischiUtility(data);
@@ -51,8 +61,9 @@ function getDiscoCollezione(id_c, id_d) {
     }
 }
 
-// Dischi delle collezioni private dell'utente
-//#7 numerazione yml
+/*
+* 7. Dischi delle collezioni private dell'utente
+*/
 function getDischiUtente() {
     message("", "");
     $.ajax({
@@ -87,6 +98,36 @@ function getDischiCondivisiUtente(){
 
 }
 
+/*
+* 9: Elenco di tutti i dischi di un'autore.
+* @param {int} val - ID dell'autore
+*/
+function getDischiByAutore(val) {
+    message("", "");
+    clear();
+    toggleVisibility(autori_container);
+
+    if (val) {
+        $.ajax({
+            url: "/rest/autori/" + val + "/dischi",
+            method: "GET",
+            success: function (data) {
+                //data - dischi
+                dischi_result.children().remove();
+                populateDischi(data);
+                message("Dischi caricati con successo", "success");
+            },
+            error: function (request, status, error) {
+                handleError(request, status, error, "#dischi", "Autore non trovato.");
+            },
+            cache: false,
+        });
+    } else {
+        handleError("", "", "", "#dischi", "Non ci sono autori.");
+    }
+}
+
+
 //Tutti i dischi
 function getDischiUtility(data) {
     if (data) {
@@ -108,26 +149,6 @@ function getDischiUtility(data) {
         dischi_result.children().remove();
         dischi_empty.show();
         dischi_empty.text("Non ci sono dischi.");
-    }
-}
-//Dischi di un autore
-function getDischiByAutore(val) {
-    if (val) {
-        $.ajax({
-            url: "rest/autori/" + val + "/dischi",
-            method: "GET",
-            success: function (data) {
-                getDischiUtility(data);
-            },
-            error: function (request, status, error) {
-                handleError(request, status, error, dischi_empty);
-            },
-            cache: false,
-        });
-    } else {
-        dischi_result.children().remove();
-        dischi_empty.show();
-        dischi_empty.text("Non ci sono dischi di questo autore.");
     }
 }
 

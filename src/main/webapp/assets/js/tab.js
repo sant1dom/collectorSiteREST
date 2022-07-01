@@ -11,6 +11,7 @@ $(document).ready(function () {
     tab_dischi.hide();
 
     function hideAll() {
+        clear();
         tab_collezioni.hide();
         tab_autori.hide();
         tab_dischi.hide();

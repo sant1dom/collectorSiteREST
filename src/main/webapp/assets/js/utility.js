@@ -83,6 +83,13 @@ function handleError(request, status, error, table, msg) {
 */
 function clear() {
     collezioni_container.css('display', 'none');
+    collezione_result.hide();
     update_disco_collezione_form.css('display', 'none');
-    add_disco_collezione_form.css('display', 'none')
+    add_disco_collezione_form.css('display', 'none');
+
+    autori_container.css('display', 'none');
+    autore_result.hide();
+
+    dischi_container.css('display', 'none');
+    dischi_result.hide();
 }

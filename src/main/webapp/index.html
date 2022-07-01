@@ -384,13 +384,26 @@
                 <div class="filtro-list">
                     <dl class="filtro-info list-group list-group-flush">
                         <dd class="flex justify-end">
-                            <button class="btn btn-primary btn-w-fixed" onclick="getAutori()">getAutori</button>
+                            <button class="btn btn-success btn-w-fixed" onclick="getAutori()">getAutori</button>
                         </dd>
-                        <dd class="flex justify-between">
-                            <input class="input-small" type="number" min="1" name="getAutore" id="getAutore">
-                            <button class="btn btn-primary btn-w-fixed" onclick="getAutore($('#getAutore').val())">
+                        <dd>
+                            <button class="btn btn-primary btn-w-fixed" onclick="toggleVisibility($('#getAutore_form'))">
                                 getAutore
                             </button>
+                            <div class="hidden" id="getAutore_form">
+                                <div class="horizontal-separator filtro-horizontal-separator"></div>
+                                <div class="flex justify-between">
+                                    <label for="getAutore">ID autore</label>
+                                    <input class="input-small" type="number" min="1" name="getAutore" id="getAutore">
+                                </div>
+
+                                <div class="flex justify-center mt-3" style="width: 100%;">
+                                    <button onclick="getAutore($('#getAutore').val())" class="btn btn-warning">
+                                        Trova
+                                    </button>
+                                </div>
+                                <div class="horizontal-separator filtro-horizontal-separator"></div>
+                            </div>
                         </dd>
                     </dl>
                 </div>
@@ -414,15 +427,16 @@
                             <th scope="col">Tipologia</th>
                         </tr>
                         </thead>
-                        <tbody id="autori-result">
+                        <tbody id="autore-result">
 
                         </tbody>
                     </table>
-                    <div class="table-empty" id="autori-empty">Non ci sono autori.</div>
+                    <div class="table-empty" id="autore-empty">Non ci sono autori.</div>
                 </div>
             </div>
             <!--END TABELLA AUTORI-->
         </div>
+        <!--END TABELLA AUTORI-->
     </div>
 </div>
 
