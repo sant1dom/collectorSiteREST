@@ -99,19 +99,13 @@
                 <div class="filtro-list">
                     <dl class="filtro-info list-group list-group-flush">
                         <dd>
-                            <button class="btn btn-success btn-w-fixed" onclick="getCollezioniUtente()">
-                                getCollezioniUtente
-                            </button>
+                            <button class="btn btn-success btn-w-fixed" onclick="getCollezioniUtente()">getCollezioniUtente</button>
                         </dd>
                         <dd>
-                            <button class="btn btn-success btn-w-fixed" onclick="getCollezioniCondivise()">
-                                getCollezioniCondivise
-                            </button>
+                            <button class="btn btn-success btn-w-fixed" onclick="getCollezioniCondivise()">getCollezioniCondivise</button>
                         </dd>
                         <dd>
-                            <button class="btn btn-primary btn-w-fixed"
-                                    onclick="toggleVisibility($('#getCollezione_form'))">getCollezione
-                            </button>
+                            <button class="btn btn-primary btn-w-fixed" onclick="toggleVisibility($('#getCollezione_form'))">getCollezione</button>
                             <div class="hidden" id="getCollezione_form">
                                 <div class="horizontal-separator filtro-horizontal-separator"></div>
                                 <div class="flex justify-between">
@@ -129,10 +123,26 @@
                             </div>
                         </dd>
                         <dd>
-                            <button class="btn btn-primary btn-w-fixed"
-                                    onclick="toggleVisibility($('#updateDiscoCollezione_form'))">updateDiscoCollezione
-                            </button>
-                            <div class="hidden" id="updateDiscoCollezione_form">
+                            <button class="btn btn-primary btn-w-fixed" onclick="toggleVisibility($('#addDiscoCollezione_form_1'))">addDiscoCollezione</button>
+                            <div class="hidden" id="addDiscoCollezione_form_1">
+                                <div class="horizontal-separator filtro-horizontal-separator"></div>
+                                <div class="flex justify-between">
+                                    <label for="addDiscoCollezione_c">ID collezione</label>
+                                    <input class="input-small" type="number" min="1" name="addDiscoCollezione_c"
+                                           id="addDiscoCollezione_c" placeholder="id collezione">
+                                </div>
+
+                                <div class="flex justify-center mt-3" style="width: 100%;">
+                                    <button onclick="discoForm('add')" class="btn btn-warning">
+                                        Aggiungi disco
+                                    </button>
+                                </div>
+                                <div class="horizontal-separator filtro-horizontal-separator"></div>
+                            </div>
+                        </dd>
+                        <dd>
+                            <button class="btn btn-primary btn-w-fixed" onclick="toggleVisibility($('#updateDiscoCollezione_form_1'))">updateDiscoCollezione</button>
+                            <div class="hidden" id="updateDiscoCollezione_form_1">
                                 <div class="horizontal-separator filtro-horizontal-separator"></div>
                                 <div class="flex justify-between">
                                     <label for="updateDiscoCollezione_c">ID collezione</label>
@@ -146,21 +156,22 @@
                                 </div>
 
                                 <div class="flex justify-center mt-3" style="width: 100%;">
-                                    <button onclick="discoForm($('#updateDiscoCollezione_d').val())"
-                                            class="btn btn-warning">
+                                    <button onclick="discoForm('update')" class="btn btn-warning">
                                         Aggiorna disco
                                     </button>
                                 </div>
                                 <div class="horizontal-separator filtro-horizontal-separator"></div>
                             </div>
                         </dd>
+
                     </dl>
                 </div>
             </div>
         </div>
         <!--END OPERAZIONI SULLE COLLEZIONI-->
-        <!--TABELLA COLLEZIONI-->
+
         <div class="tables-container">
+            <!--TABELLA COLLEZIONI-->
             <div class="table-container" id="collezioni-container" style="display: block">
                 <div class="title flex justify-between align-items-center">
                     COLLEZIONI
@@ -183,6 +194,8 @@
                 </div>
             </div>
             <!--END TABELLA COLLEZIONI-->
+
+            <!--FORM ADD DISCO COLLEZIONE-->
             <div class="table-container" id="updateDiscoCollezione_form_2" style="display: none">
                 <div class="card form-card" style="width: 100%">
                     <div class="card-header">
@@ -191,33 +204,29 @@
                     <div class="card-body">
                         <div class="form-container flex justify-between flex-wrap">
                             <div class="form-group" style="width: 40%;">
-                                <label for="titolo">Titolo:</label>
-                                <input type="text" class="form-control" required id="titolo" name="titolo"
-                                       placeholder="Titolo">
+                                <label for="titolo_update">Titolo:</label>
+                                <input type="text" class="form-control" id="titolo_update" name="titolo" placeholder="Titolo" required>
                             </div>
 
                             <div class="form-group" style="width: 20%;">
-                                <label for="anno">Anno:</label>
-                                <input type="number" class="form-control" required id="anno" name="anno"
-                                       placeholder="anno">
+                                <label for="anno_update">Anno:</label>
+                                <input type="number" class="form-control" id="anno_update" name="anno" placeholder="anno" required>
                             </div>
 
                             <div class="form-group" style="width: 20%;">
-                                <label for="barcode">Barcode:</label>
-                                <input type="text" class="form-control" value="" id="barcode" name="barcode"
-                                       placeholder="Barcode">
+                                <label for="barcode_update">Barcode:</label>
+                                <input type="text" class="form-control" id="barcode_update" name="barcode" placeholder="Barcode">
                             </div>
 
                             <div class="form-group" style="width: 20%;">
-                                <label for="etichetta">Etichetta:</label>
-                                <input type="text" class="form-control" required id="etichetta" name="etichetta"
-                                       placeholder="Etichetta">
+                                <label for="etichetta_update">Etichetta:</label>
+                                <input type="text" class="form-control" id="etichetta_update" name="etichetta" placeholder="Etichetta" required>
                             </div>
                         </div>
                         <div class="form-container flex justify-between flex-wrap">
                             <div class="form-group" style="width: 33%;">
-                                <label for="genere">Genere:</label>
-                                <select id="genere" name="genere" class="selectpicker" data-live-search="true" required>
+                                <label for="genere_update">Genere:</label>
+                                <select class="selectpicker" id="genere_update" name="genere" data-live-search="true" required>
                                     <option selected value="">Scegli un genere</option>
                                     <option value="POP">POP</option>
                                     <option value="ROCK">ROCK</option>
@@ -235,9 +244,8 @@
                                 </select>
                             </div>
                             <div class="form-group" style="width: 33%;">
-                                <label for="formato">Formato:</label>
-                                <select id="formato" name="formato" class="selectpicker" data-live-search="true"
-                                        required>
+                                <label for="formato_update">Formato:</label>
+                                <select class="selectpicker" id="formato_update" name="formato" data-live-search="true" required>
                                     <option selected value="">Scegli un formato</option>
                                     <option value="CD">CD</option>
                                     <option value="VINILE">VINILE</option>
@@ -245,9 +253,8 @@
                                 </select>
                             </div>
                             <div class="form-group" style="width: 33%;">
-                                <label for="statoConservazione">Stato di conservazione:</label>
-                                <select id="statoConservazione" name="statoConservazione" class="selectpicker"
-                                        data-live-search="true" required>
+                                <label for="statoConservazione_update">Stato di conservazione:</label>
+                                <select class="selectpicker" id="statoConservazione_update" name="statoConservazione" data-live-search="true" required>
                                     <option selected value="">Scegli uno stato di conservazione</option>
                                     <option value="NUOVO">NUOVO</option>
                                     <option value="BUONO">BUONO</option>
@@ -258,24 +265,112 @@
                             </div>
                         </div>
 
-                        <div class="form-container flex justify-between flex-wrap">
+                        <div class="form-container flex justify-center flex-wrap">
                             <div class="form-group">
-                                <label for="autore">Autori:</label>
-                                <select id="autore" name="autore" class="selectpicker" multiple data-live-search="true"
-                                        required>
+                                <label for="autore_update">Autori:</label>
+                                <select class="selectpicker" id="autore_update" name="autore" multiple data-live-search="true" required>
                                     <option value="">Scegli un autore</option>
                                 </select>
                             </div>
                         </div>
+                        <div class="flex justify-center align-items-center pt-3">
+                            <button class="btn btn-success" onclick="updateDiscoCollezione($('#updateDiscoCollezione_c').val(), $('#updateDiscoCollezione_d').val())">
+                                SALVA
+                            </button>
+                        </div>
                     </div>
                 </div>
-                <div class="flex justify-center align-items-center pt-3">
-                    <button class="btn btn-success" onclick="updateDiscoCollezione($('#updateDiscoCollezione_c').val(), $('#updateDiscoCollezione_d').val())">
-                        SALVA
-                    </button>
+            </div>
+            <!--END FORM ADD DISCO COLLEZIONE-->
+
+            <!--FORM UPDATE DISCO COLLEZIONE-->
+            <div class="table-container" id="addDiscoCollezione_form_2" style="display: none">
+                <div class="card form-card" style="width: 100%">
+                    <div class="card-header">
+                        <span class="form-title flex justify-center align-items-center">AGGIUNGI DISCO</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-container flex justify-between flex-wrap">
+                            <div class="form-group" style="width: 40%;">
+                                <label for="titolo_add">Titolo:</label>
+                                <input type="text" class="form-control" id="titolo_add" name="titolo" placeholder="Titolo" required>
+                            </div>
+
+                            <div class="form-group" style="width: 20%;">
+                                <label for="anno_add">Anno:</label>
+                                <input type="number" class="form-control"  id="anno_add" name="anno" placeholder="anno" required>
+                            </div>
+
+                            <div class="form-group" style="width: 20%;">
+                                <label for="barcode_add">Barcode:</label>
+                                <input type="text" class="form-control" value="" id="barcode_add" name="barcode" placeholder="Barcode">
+                            </div>
+
+                            <div class="form-group" style="width: 20%;">
+                                <label for="etichetta_add">Etichetta:</label>
+                                <input type="text" class="form-control" required id="etichetta_add" name="etichetta"
+                                       placeholder="Etichetta">
+                            </div>
+                        </div>
+                        <div class="form-container flex justify-between flex-wrap">
+                            <div class="form-group" style="width: 33%;">
+                                <label for="genere_add">Genere:</label>
+                                <select  class="selectpicker" data-live-search="true" id="genere_add" name="genere" required>
+                                    <option selected value="">Scegli un genere</option>
+                                    <option value="POP">POP</option>
+                                    <option value="ROCK">ROCK</option>
+                                    <option value="JAZZ">JAZZ</option>
+                                    <option value="CLASSIC">CLASSIC</option>
+                                    <option value="METAL">METAL</option>
+                                    <option value="RAP">RAP</option>
+                                    <option value="BLUES">BLUES</option>
+                                    <option value="PUNK">PUNK</option>
+                                    <option value="REGGAE">REGGAE</option>
+                                    <option value="COUNTRY">COUNTRY</option>
+                                    <option value="HIPHOP">HIPHOP</option>
+                                    <option value="ELECTRONIC">ELECTRONIC</option>
+                                    <option value="OTHER">OTHER</option>
+                                </select>
+                            </div>
+                            <div class="form-group" style="width: 33%;">
+                                <label for="formato_add">Formato:</label>
+                                <select id="formato_add" name="formato" class="selectpicker" data-live-search="true" required>
+                                    <option selected value="">Scegli un formato</option>
+                                    <option value="CD">CD</option>
+                                    <option value="VINILE">VINILE</option>
+                                    <option value="DIGITALE">DIGITALE</option>
+                                </select>
+                            </div>
+                            <div class="form-group" style="width: 33%;">
+                                <label for="statoConservazione_add">Stato di conservazione:</label>
+                                <select id="statoConservazione_add" name="statoConservazione" class="selectpicker" data-live-search="true" required>
+                                    <option selected value="">Scegli uno stato di conservazione</option>
+                                    <option value="NUOVO">NUOVO</option>
+                                    <option value="BUONO">BUONO</option>
+                                    <option value="USATO">USATO</option>
+                                    <option value="SCARSO">SCARSO</option>
+                                    <option value="ROTTO">ROTTO</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-container flex justify-center flex-wrap">
+                            <div class="form-group">
+                                <label for="autore_add">Autori:</label>
+                                <select id="autore_add" name="autore" class="selectpicker" multiple data-live-search="true" required>
+                                    <option value="">Scegli un autore</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="flex justify-center align-items-center pt-3">
+                            <button class="btn btn-success" onclick="addDiscoCollezione($('#addDiscoCollezione_c').val())">
+                                SALVA
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
-
+            <!--END FORM UPDATE DISCO COLLEZIONE-->
         </div>
     </div>
 </div>
