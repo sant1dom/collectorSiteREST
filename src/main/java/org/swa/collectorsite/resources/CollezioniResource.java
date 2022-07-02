@@ -6,14 +6,12 @@ import jakarta.ws.rs.core.*;
 import org.swa.collectorsite.RESTWebApplicationException;
 import org.swa.collectorsite.security.Logged;
 
-import java.lang.reflect.Array;
 import java.net.URI;
 import java.sql.*;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Path("collezioni")
 public class CollezioniResource {
@@ -234,7 +232,7 @@ public class CollezioniResource {
         String add_autori = "INSERT INTO disco_autore (disco_id, autore_id) VALUES (?, ?)";
         try (PreparedStatement stmt = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, (String) disco.get("titolo"));
-            stmt.setInt(2, (int) disco.get("anno"));
+            stmt.setInt(2, Integer.parseInt((String) disco.get("anno")));
             stmt.setString(3, (String) disco.get("barcode"));
             stmt.setString(4, (String) disco.get("etichetta"));
             stmt.setDate(5, Date.valueOf(LocalDate.now()));
@@ -243,7 +241,7 @@ public class CollezioniResource {
             stmt.setString(8, (String) disco.get("stato_conservazione"));
             stmt.setInt(9, Integer.parseInt(securityContext.getUserPrincipal().getName()));
             if (disco.get("padre") != null) {
-                stmt.setInt(10, (int) disco.get("padre"));
+                stmt.setInt(10, Integer.parseInt((String) disco.get("padre")));
             } else {
                 stmt.setNull(10, Types.INTEGER);
             }
@@ -435,8 +433,6 @@ public class CollezioniResource {
     public Response modificaDisco(@PathParam("id_collezione") int id_collezione,
                                   @PathParam("id_disco") int id_disco, Map<String, Object> disco,
                                   @Context SecurityContext securityContext) {
-        System.out.println();
-
 
         String query = "UPDATE disco SET titolo = ?, anno = ?, barcode = ?, etichetta = ?, genere = ?, formato = ?, stato_conservazione = ?, utente_id = ?, padre = ? WHERE id = ?";
         String delete_relazione = "DELETE FROM disco_autore WHERE disco_id = ?";
@@ -523,20 +519,22 @@ public class CollezioniResource {
                                            @Context UriInfo uriinfo,
                                            @Context SecurityContext securityContext) {
         StringBuilder query;
-        if (autore != null) {
+        if (autore != null && !autore.isBlank()) {
             query = new StringBuilder("SELECT disco.id FROM disco JOIN collezione_disco cd on disco.id = cd.disco_id JOIN disco_autore ad on disco.id = ad.disco_id JOIN autore a on ad.autore_id = a.id JOIN collezione_condivisa_con cc on cd.collezione_id = cc.collezione_id WHERE cc.utente_id = ? AND titolo LIKE ? AND genere LIKE ? AND formato LIKE ? AND a.nome_artistico LIKE ?");
         } else {
             query = new StringBuilder("SELECT disco.id FROM disco JOIN collezione_disco cd on disco.id = cd.disco_id JOIN disco_autore ad on disco.id = ad.disco_id JOIN collezione_condivisa_con cc on cd.collezione_id = cc.collezione_id WHERE cc.utente_id = ? AND titolo LIKE ? AND genere LIKE ? AND formato LIKE ?");
         }
         if (anno != 0) {
-            query.append(" AND anno = ?");
+            query.append(" AND anno = ? ORDER BY disco.id");
+        } else {
+            query.append(" ORDER BY disco.id");
         }
         try (PreparedStatement stmt = con.prepareStatement(query.toString())) {
             stmt.setString(1, securityContext.getUserPrincipal().getName());
-            stmt.setString(2, "%" + ((titolo != null) ? titolo : "") + "%");
-            stmt.setString(3, "%" + ((genere != null) ? genere : "") + "%");
-            stmt.setString(4, "%" + ((formato != null) ? formato : "") + "%");
-            if (autore != null) {
+            stmt.setString(2, "%" + ((titolo != null && !titolo.isBlank()) ? titolo : "") + "%");
+            stmt.setString(3, "%" + ((genere != null && !genere.isBlank()) ? genere : "") + "%");
+            stmt.setString(4, "%" + ((formato != null && !formato.isBlank()) ? formato : "") + "%");
+            if (autore != null && !autore.isBlank()) {
                 stmt.setString(5, "%" + autore + "%");
                 if (anno != 0) {
                     stmt.setInt(6, anno);
@@ -565,21 +563,25 @@ public class CollezioniResource {
                                          @QueryParam("autore") String autore,
                                          @Context UriInfo uriinfo,
                                          @Context SecurityContext securityContext) {
+
         StringBuilder query;
-        if (autore != null) {
-            query = new StringBuilder("SELECT * FROM disco JOIN collezione_disco cd on disco.id = cd.disco_id JOIN collezione collezione on cd.collezione_id = collezione.id JOIN disco_autore ad on disco.id = ad.disco_id JOIN autore a on ad.autore_id = a.id WHERE collezione.utente_id = ? AND disco.titolo LIKE ? AND genere LIKE ? AND formato LIKE ? AND a.nome_artistico LIKE ? AND collezione.privacy = 'PRIVATO' ORDER BY disco.id");
+        if (autore != null && !autore.isBlank()) {
+            query = new StringBuilder("SELECT disco.id FROM disco JOIN collezione_disco cd on disco.id = cd.disco_id JOIN collezione on cd.collezione_id = collezione.id JOIN disco_autore ad on disco.id = ad.disco_id JOIN autore a on ad.autore_id = a.id WHERE collezione.utente_id = ? AND disco.titolo LIKE ? AND genere LIKE ? AND formato LIKE ? AND a.nome_artistico LIKE ? AND collezione.privacy = 'PRIVATO'");
         } else {
-            query = new StringBuilder("SELECT * FROM disco JOIN collezione_disco cd on disco.id = cd.disco_id JOIN collezione collezione on cd.collezione_id = collezione.id WHERE collezione.utente_id = ? AND disco.titolo LIKE ? AND genere LIKE ? AND formato LIKE ? AND collezione.privacy = 'PRIVATO' ORDER BY disco.id");
+            query = new StringBuilder("SELECT disco.id FROM disco JOIN collezione_disco cd on disco.id = cd.disco_id JOIN collezione on cd.collezione_id = collezione.id WHERE collezione.utente_id = ? AND disco.titolo LIKE ? AND genere LIKE ? AND formato LIKE ? AND collezione.privacy = 'PRIVATO'");
         }
+
         if (anno != 0) {
-            query.append(" AND anno = ?");
+            query.append(" AND anno = ? ORDER BY disco.id");
+        } else {
+            query.append(" ORDER BY disco.id");
         }
         try (PreparedStatement stmt = con.prepareStatement(query.toString())) {
             stmt.setString(1, securityContext.getUserPrincipal().getName());
-            stmt.setString(2, "%" + ((titolo != null) ? titolo : "") + "%");
-            stmt.setString(3, "%" + ((genere != null) ? genere : "") + "%");
-            stmt.setString(4, "%" + ((formato != null) ? formato : "") + "%");
-            if (autore != null) {
+            stmt.setString(2, "%" + ((titolo != null && !titolo.isBlank()) ? titolo : "") + "%");
+            stmt.setString(3, "%" + ((genere != null && !genere.isBlank()) ? genere : "") + "%");
+            stmt.setString(4, "%" + ((formato != null && !formato.isBlank()) ? formato : "") + "%");
+            if (autore != null && !autore.isBlank()) {
                 stmt.setString(5, "%" + autore + "%");
                 if (anno != 0) {
                     stmt.setInt(6, anno);
@@ -601,26 +603,28 @@ public class CollezioniResource {
     @GET
     @Produces("application/json")
     @Path("dischi")
-    public Response ricercaDiscoCollezioniPubbliche(@QueryParam("titolo") String titolo,
-                                                    @QueryParam("anno") int anno,
-                                                    @QueryParam("genere") String genere,
-                                                    @QueryParam("formato") String formato,
-                                                    @QueryParam("autore") String autore,
-                                                    @Context UriInfo uriinfo) {
+    public Response ricercaDiscoPubbliche(@QueryParam("titolo") String titolo,
+                                          @QueryParam("anno") int anno,
+                                          @QueryParam("genere") String genere,
+                                          @QueryParam("formato") String formato,
+                                          @QueryParam("autore") String autore,
+                                          @Context UriInfo uriinfo) {
         StringBuilder query;
-        if (autore != null) {
-            query = new StringBuilder("SELECT * FROM disco JOIN collezione_disco cd on disco.id = cd.disco_id JOIN disco_autore ad on disco.id = ad.disco_id JOIN autore a on ad.autore_id = a.id WHERE cd.collezione_id IN (SELECT id FROM collezione WHERE privacy = 'PUBBLICO') AND titolo LIKE ? AND genere LIKE ? AND formato LIKE ? AND a.nome_artistico LIKE ? ORDER BY disco.id");
+        if (autore != null && !autore.isBlank()) {
+            query = new StringBuilder("SELECT DISTINCT(disco.id) FROM disco JOIN collezione_disco cd on disco.id = cd.disco_id JOIN collezione c on cd.collezione_id = c.id JOIN disco_autore da on disco.id = da.disco_id JOIN autore a on a.id = da.autore_id WHERE c.privacy = 'PUBBLICO' AND disco.titolo LIKE ? AND genere LIKE ? AND formato LIKE ? AND a.nome_artistico LIKE ?");
         } else {
-            query = new StringBuilder("SELECT * FROM disco JOIN collezione_disco cd on disco.id = cd.disco_id WHERE cd.collezione_id IN (SELECT id FROM collezione WHERE privacy = 'PUBBLICO') AND titolo LIKE ? AND genere LIKE ? AND formato LIKE ? ORDER BY disco.id");
+            query = new StringBuilder("SELECT DISTINCT(disco.id) FROM disco JOIN collezione_disco cd on disco.id = cd.disco_id JOIN collezione c on cd.collezione_id = c.id JOIN disco_autore da on disco.id = da.disco_id JOIN autore a on a.id = da.autore_id WHERE c.privacy = 'PUBBLICO' AND disco.titolo LIKE ? AND genere LIKE ? AND formato LIKE ?");
         }
         if (anno != 0) {
-            query.append(" AND anno = ?");
+            query.append(" AND anno = ? ORDER BY disco.id");
+        } else {
+            query.append(" ORDER BY disco.id");
         }
         try (PreparedStatement stmt = con.prepareStatement(query.toString())) {
-            stmt.setString(1, "%" + ((titolo != null) ? titolo : "") + "%");
-            stmt.setString(2, "%" + ((genere != null) ? genere : "") + "%");
-            stmt.setString(3, "%" + ((formato != null) ? formato : "") + "%");
-            if (autore != null) {
+            stmt.setString(1, "%" + ((titolo != null && !titolo.isBlank()) ? titolo : "") + "%");
+            stmt.setString(2, "%" + ((genere != null && !genere.isBlank()) ? genere : "") + "%");
+            stmt.setString(3, "%" + ((formato != null && !formato.isBlank()) ? formato : "") + "%");
+            if (autore != null && !autore.isBlank()) {
                 stmt.setString(4, "%" + autore + "%");
                 if (anno != 0) {
                     stmt.setInt(5, anno);

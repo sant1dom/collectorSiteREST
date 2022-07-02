@@ -79,10 +79,10 @@ public class AutoriResource {
     @Path("{id}/dischi")
     @Produces("application/json")
     public Response getDischiByAutore(@PathParam("id") int id, @Context UriInfo uriinfo) throws SQLException {
-        try (PreparedStatement sDischiAutore = con.prepareStatement("SELECT * FROM disco " +
+        try (PreparedStatement sDischiAutore = con.prepareStatement("SELECT DISTINCT(disco.id) FROM disco " +
                 "JOIN disco_autore ON disco.id = disco_autore.disco_id " +
                 "JOIN collezione_disco cd on disco.id = cd.disco_id " +
-                "JOIN collezione c on cd.collezione_id = c.id WHERE disco_autore.autore_id = ? AND c.privacy = 'PUBBLICO' ORDER BY id")) {
+                "JOIN collezione c on cd.collezione_id = c.id WHERE disco_autore.autore_id = ? AND c.privacy = 'PUBBLICO' ORDER BY disco.id")) {
 
             sDischiAutore.setInt(1, id);
             try (ResultSet rs = sDischiAutore.executeQuery()) {

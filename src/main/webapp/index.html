@@ -206,7 +206,7 @@
             </div>
             <!--END TABELLA COLLEZIONI-->
 
-            <!--FORM ADD DISCO COLLEZIONE-->
+            <!--FORM UPDATE DISCO COLLEZIONE-->
             <div class="table-container" id="updateDiscoCollezione_form_2" style="display: none">
                 <div class="card form-card" style="width: 100%">
                     <div class="card-header">
@@ -301,9 +301,9 @@
                     </div>
                 </div>
             </div>
-            <!--END FORM ADD DISCO COLLEZIONE-->
+            <!--END FORM UPDATE DISCO COLLEZIONE-->
 
-            <!--FORM UPDATE DISCO COLLEZIONE-->
+            <!--FORM ADD DISCO COLLEZIONE-->
             <div class="table-container" id="addDiscoCollezione_form_2" style="display: none">
                 <div class="card form-card" style="width: 100%">
                     <div class="card-header">
@@ -398,7 +398,7 @@
                     </div>
                 </div>
             </div>
-            <!--END FORM UPDATE DISCO COLLEZIONE-->
+            <!--END FORM ADD DISCO COLLEZIONE-->
         </div>
     </div>
 </div>
@@ -478,15 +478,56 @@
                 <div class="filtro-list">
                     <dl class="filtro-info list-group list-group-flush">
                         <dd>
-                            <button class="btn btn-success btn-w-fixed" onclick="getDischiUtente()">getDischiUtente
+                            <button class="btn btn-primary btn-w-fixed" onclick="toggleVisibility($('#ricercaDischiPrivati_form'))">
+                                ricercaDischiPrivati
                             </button>
+                            <div class="hidden" id="ricercaDischiPrivati_form">
+                                <div class="horizontal-separator filtro-horizontal-separator"></div>
+                                <div class="flex justify-between">
+                                    <label for="titolo_filtro_privato">Titolo</label>
+                                    <input class="input-small" value="" type="text" name="titolo"
+                                           id="titolo_filtro_privato">
+                                </div>
+                                <div class="flex justify-between mt-1">
+                                    <label for="anno_filtro_privato">Anno</label>
+                                    <input class="input-small" value="" type="number" min="1" name="anno"
+                                           id="anno_filtro_privato">
+                                </div>
+                                <div class="flex justify-between mt-1">
+                                    <label for="genere_filtro_privato">Genere</label>
+                                    <input class="input-small" value="" type="text" name="genere"
+                                           id="genere_filtro_privato">
+                                </div>
+                                <div class="flex justify-between mt-1">
+                                    <label for="formato_filtro_privato">Formato</label>
+                                    <input class="input-small" value="" type="text" name="formato"
+                                           id="formato_filtro_privato">
+                                </div>
+                                <div class="flex justify-between mt-1">
+                                    <label for="autore_filtro_privato">Autore</label>
+                                    <input class="input-small" value="" type="text" name="autore"
+                                           id="autore_filtro_privato">
+                                </div>
+                                <div class="flex justify-center mt-3" style="width: 100%;">
+                                    <button class="btn btn-warning"
+                                            onclick="ricercaDischi('PRIVATO',
+                                        $('#titolo_filtro_privato').val(),
+                                        $('#anno_filtro_privato').val(),
+                                        $('#genere_filtro_privato').val(),
+                                        $('#formato_filtro_privato').val(),
+                                        $('#autore_filtro_privato').val())">
+                                        Trova
+                                    </button>
+                                </div>
+                                <div class="horizontal-separator filtro-horizontal-separator"></div>
+                            </div>
                         </dd>
                         <dd>
                             <button class="btn btn-primary btn-w-fixed"
-                                    onclick="toggleVisibility($('#getDischiCondivisiUtente_form'))">
-                                getDischiCondivisiUtente
+                                    onclick="toggleVisibility($('#ricercaDischiCondivisi_form'))">
+                                ricercaDischiCondivisi
                             </button>
-                            <div class="hidden" id="getDischiCondivisiUtente_form">
+                            <div class="hidden" id="ricercaDischiCondivisi_form">
                                 <div class="horizontal-separator filtro-horizontal-separator"></div>
                                 <div class="flex justify-between">
                                     <label for="titolo_filtro_condiviso">Titolo</label>
@@ -515,7 +556,7 @@
                                 </div>
                                 <div class="flex justify-center mt-3" style="width: 100%;">
                                     <button class="btn btn-warning"
-                                            onclick="getDischiCondivisiUtente(
+                                            onclick="ricercaDischi('CONDIVISO',
                                         $('#titolo_filtro_condiviso').val(),
                                         $('#anno_filtro_condiviso').val(),
                                         $('#genere_filtro_condiviso').val(),
@@ -530,7 +571,7 @@
                         <dd>
                             <button class="btn btn-primary btn-w-fixed"
                                     onclick="toggleVisibility($('#ricercaDiscoCollezioniPubbliche_form'))">
-                                ricercaDiscoCollezioniPubbliche
+                                ricercaDischiPubblici
                             </button>
                             <div class="hidden" id="ricercaDiscoCollezioniPubbliche_form">
                                 <div class="horizontal-separator filtro-horizontal-separator"></div>
@@ -561,7 +602,7 @@
                                 </div>
                                 <div class="flex justify-center mt-3" style="width: 100%;">
                                     <button class="btn btn-warning"
-                                            onclick="ricercaDiscoCollezioniPubbliche(
+                                            onclick="ricercaDischi('PUBBLICO',
                                         $('#titolo_filtro_pubblico').val(),
                                         $('#anno_filtro_pubblico').val(),
                                         $('#genere_filtro_pubblico').val(),
@@ -718,7 +759,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-
 
     <!-- SCRIPTS PER TUTTE LE PAGINE -->
     <script src="assets/js/utility.js"></script>

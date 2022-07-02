@@ -71,71 +71,33 @@ function getDiscoCollezione(c, d) {
 
 /*
 * 7. Dischi delle collezioni private dell'utente
-*/
-function getDischiUtente() {
-    message("", "");
-    clear();
-    toggleVisibility(dischi_container);
-
-    $.ajax({
-        url: "rest/collezioni/private/dischi",
-        method: "GET",
-        success: function (data) {
-            dischi_result.children().remove();
-            getDischiUtility(data);
-            message("Dischi caricati con successo", "success");
-        },
-        error: function (request, status, error) {
-            handleError(request, status, error, "#dischi", "errore nel caricamento dei dischi");
-        },
-        cache: false,
-    });
-}
-
-/*
-* 3. Dischi delle collezioni condivise con l'utente
-* 7. Ricerca di un disco tra le collezioni condivise con criteri di ricerca
 * @param {string} titolo - Titolo del disco
 * @param {string} anno - Anno di produzione del disco
 * @param {string} genere - Genere del disco
 * @param {string} formato - Artista del disco
 * @param {string} autore - Casa discografica del disco
 */
-function getDischiCondivisiUtente(titolo, anno, genere, formato, autore) {
+function ricercaDischi(op, titolo, anno, genere, formato, autore) {
     message("", "");
     clear();
     toggleVisibility(dischi_container);
 
-    $.ajax({
-        url: "rest/collezioni/condivise/dischi?titolo=" + titolo + "&anno=" + anno + "&genere=" + genere + "&formato=" + formato + "&autore=" + autore,
-        method: "GET",
-        success: function (data) {
-            dischi_result.children().remove();
-            getDischiUtility(data);
-            message("Dischi caricati con successo", "success");
-        },
-        error: function (request, status, error) {
-            handleError(request, status, error, "#dischi", "errore nel caricamento dei dischi");
-        },
-        cache: false,
-    });
-}
+    let query = "";
 
-/*
-* 7. Ricerca di un disco tra le collezioni pubbliche con criteri di ricerca
-* @param {string} titolo - Titolo del disco
-* @param {string} anno - Anno di produzione del disco
-* @param {string} genere - Genere del disco
-* @param {string} formato - Artista del disco
-* @param {string} autore - Casa discografica del disco
-*/
-function ricercaDiscoCollezioniPubbliche(titolo, anno, genere, formato, autore) {
-    message("", "");
-    clear();
-    toggleVisibility(dischi_container);
+    switch (op) {
+        case "CONDIVISO":
+            query = "rest/collezioni/condivise/dischi";
+            break;
+        case "PRIVATO":
+            query = "rest/collezioni/private/dischi";
+            break;
+        case "PUBBLICO":
+            query = "rest/collezioni/dischi";
+            break;
+    }
 
     $.ajax({
-        url: "/rest/collezioni/dischi?titolo=" + titolo + "&anno=" + anno + "&genere=" + genere + "&formato=" + formato + "&autore=" + autore,
+        url: query + "?titolo=" + titolo + "&anno=" + anno + "&genere=" + genere + "&formato=" + formato + "&autore=" + autore,
         method: "GET",
         success: function (data) {
             dischi_result.children().remove();
@@ -160,12 +122,12 @@ function getDischiByAutore(val) {
 
     if (val) {
         $.ajax({
-            url: "/rest/autori/" + val + "/dischi",
+            url: "rest/autori/" + val + "/dischi",
             method: "GET",
             success: function (data) {
                 //data - dischi
                 dischi_result.children().remove();
-                populateDischi(data);
+                getDischiUtility(data);
                 message("Dischi caricati con successo", "success");
             },
             error: function (request, status, error) {

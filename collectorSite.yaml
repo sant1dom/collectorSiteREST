@@ -253,7 +253,7 @@ paths:
   #7#
   '/rest/collezioni/private/dischi':
     get:
-        operationId: getDischiUtente
+        operationId: ricercaDiscoPrivate
         tags:
             - collezioni
         security:
@@ -301,7 +301,7 @@ paths:
               $ref: '#/components/responses/NotFoundError'
   '/rest/collezioni/dischi':
     get:
-      operationId: ricercaDiscoCollezioniPubbliche
+      operationId: ricercaDiscoPubbliche
       tags:
         - collezioni
       parameters:
@@ -353,7 +353,7 @@ paths:
           ##
   '/rest/collezioni/condivise/dischi':
     get:
-      operationId: getDischiCondivisiUtente
+      operationId: ricercaDiscoCondivise
       tags:
         - collezioni
       security:
@@ -445,8 +445,8 @@ paths:
     get:
       operationId: getDischiByAutore
       parameters:
-        - name: id_autore
-          in: query
+        - name: id
+          in: path
           required: true
           schema:
             type: integer

@@ -110,7 +110,7 @@ function addDiscoCollezione(c) {
     if (c) {
         $.ajax({
             url: "rest/collezioni/" + c + "/dischi",
-            method: "PUT",
+            method: "POST",
             contentType: "application/json",
             data: JSON.stringify({
                 titolo: $('#titolo_add').val(),
@@ -217,6 +217,7 @@ function discoForm(op) {
 * @param {Selectpicker} select - La select che deve essere riempita con gli autori
 */
 function getAutoriForm(select) {
+
     $.ajax({
         url: "rest/autori",
         method: "GET",
@@ -227,6 +228,8 @@ function getAutoriForm(select) {
                     method: "GET",
                     success: function (data) {
                         select.append('<option value="' + data['id'] + '">' + data['nome_artistico'] + '</option>');
+                        select.trigger('change');
+                        select_picker.selectpicker('refresh');
                     }
                 })
             })
@@ -249,7 +252,6 @@ function populateDiscoCollezioneUpdateForm() {
     const statoConservazione = $('#statoConservazione_update');
     const barcode = $('#barcode_update');
     const etichetta = $('#etichetta_update');
-    const autori = $('#autore_update');
 
     $.ajax({
         url: "rest/dischi/" + id_disco_update.val(),
@@ -266,8 +268,7 @@ function populateDiscoCollezioneUpdateForm() {
             } else {
                 statoConservazione.val(data['stato_conservazione']).trigger('change');
             }
-            getAutoriForm(autori);
-            select_picker.selectpicker('refresh');
+            getAutoriForm($('#autore_update'));
         },
         error: function (request, status, error) {
             clear()
@@ -276,7 +277,6 @@ function populateDiscoCollezioneUpdateForm() {
         cache: false,
     });
 }
-
 
 /*
 * Funzione Utility per Ottenere le collezioni

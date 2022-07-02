@@ -4,13 +4,10 @@ package org.swa.collectorsite.jackson;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-
-import java.time.LocalDate;
-import java.util.Calendar;
-
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import jakarta.ws.rs.ext.ContextResolver;
 import jakarta.ws.rs.ext.Provider;
+
+import java.util.Calendar;
 
 /**
  *
