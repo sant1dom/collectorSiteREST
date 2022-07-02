@@ -481,11 +481,10 @@ public class CollezioniResource {
     // Operazione 2
     @GET
     @Logged
-    @Path("all")
+    @Path("private")
     @Produces("application/json")
-    public Response getCollezioniUtente(@Context UriInfo uriInfo, @Context SecurityContext securityContext) {
+    public Response getCollezioniPrivateUtente(@Context UriInfo uriInfo, @Context SecurityContext securityContext) {
         List<String> collezioni = new ArrayList<>();
-
         try (PreparedStatement stmt = con.prepareStatement("SELECT id FROM collezione WHERE utente_id = ? ORDER BY id")) {
             return collezioniUriList(uriInfo, securityContext.getUserPrincipal().getName(), collezioni, stmt);
         } catch (SQLException ex) {
@@ -603,7 +602,7 @@ public class CollezioniResource {
     @GET
     @Produces("application/json")
     @Path("dischi")
-    public Response ricercaDiscoPubbliche(@QueryParam("titolo") String titolo,
+    public Response ricercaDischiPubblici(@QueryParam("titolo") String titolo,
                                           @QueryParam("anno") int anno,
                                           @QueryParam("genere") String genere,
                                           @QueryParam("formato") String formato,

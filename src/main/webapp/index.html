@@ -33,6 +33,7 @@
     <link href="assets/css/filtro.css" rel="stylesheet"/>
     <link href="assets/css/tabBar.css" rel="stylesheet"/>
 
+    <link href="assets/css/stats.css" rel="stylesheet"/>
     <link href="assets/css/search.css" rel="stylesheet"/>
     <!-- CSS -->
 </head>
@@ -723,8 +724,24 @@
             <div class="filtro">
                 <div class="filtro-list">
                     <dl class="filtro-info list-group list-group-flush">
-                        <dd class="flex justify-end">
-                            <button class="btn btn-success btn-w-fixed" onclick=""></button>
+                        <dd class="">
+                            <button class="btn btn-success btn-w-fixed" onclick="getStats()">getStats</button>
+                        </dd>
+                        <dd class="">
+                            <button class="btn btn-success btn-w-fixed" onclick="getStatsUtenteLoggato()">getStatsUtenteLoggato</button>
+                        </dd>
+                        <!-- Aggiungere form il metodo da chiamare è quello dell'onclick -->
+                        <dd class="">
+                            <button class="btn btn-success btn-w-fixed" onclick="getStatsDischiByEtichetta()">getStatsDischiByEtichetta</button>
+                        </dd>
+                        <dd class="">
+                            <button class="btn btn-success btn-w-fixed" onclick="getStatsDischiByAnno()">getStatsDischiByAnno</button>
+                        </dd>
+                        <dd class="">
+                            <button class="btn btn-success btn-w-fixed" onclick="getStatsDischiByGenere()">getStatsDischiByGenere</button>
+                        </dd>
+                        <dd class="">
+                            <button class="btn btn-success btn-w-fixed" onclick="getStatsDischiByAutore()">getStatsDischiByAutore</button>
                         </dd>
                     </dl>
                 </div>
@@ -735,10 +752,31 @@
         <div class="tables-container">
             <div class="table-container" id="statistiche-container">
                 <div class="title flex justify-between align-items-center">
-                    RISULTATI
+                    STATISTICHE DEL SITO
                 </div>
-                <div>
-
+                <div id="stats_pubbliche">
+                    <div class="row ml-5 mt-3">
+                        <div class="col">
+                            <div class="ml-3">
+                                <h4 id="numero_dischi">Numero di dischi totali nel sistema: </h4>
+                                <h4 id="numero_tracce">Numero di tracce totali nel sistema: </h4>
+                                <h4 id="numero_autori">Numero di autori totali nel sistema: </h4>
+                                <h4 id="numero_etichette">Numero di etichette totali nel sistema: </h4>
+                                <h4 id="numero_generi">Numero di generi totali nel sistema: </h4>
+                                <h4 id="numero_collezioni_pubbliche">Numero di collezioni pubbliche nel sistema: </h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="stats_utente">
+                    <div class="row ml-5 mt-3">
+                        <div class="col">
+                            <div class="ml-3">
+                                <h4 id="numero_collezioni_private_utente">Numero di tue collezioni private nel sistema: </h4>
+                                <h4 id="numero_collezioni_totali_utente">Numero di tue collezioni totali nel sistema: </h4>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -772,7 +810,8 @@
     <script src="assets/js/autori.js"></script>
     <!-- SCRIPTS PER I DISCHI -->
     <script src="assets/js/dischi.js"></script>
-
+    <!-- SCRIPTS PER LE STATISTICHE -->
+    <script src="assets/js/stats.js"></script>
     <!-- END SCRIPT -->
 </footer>
 <!-- FOOTER END -->

@@ -2,6 +2,7 @@
 * File di utility per tutte el operazioni.
 * @Author: Davide De Acetis
 * @Author: Raluca Mihaela Bujoreanu
+* @Author: Domenico Santone
 */
 
 const select_picker = $('.selectpicker');
@@ -92,6 +93,8 @@ function clear() {
 
     dischi_container.css('display', 'none');
     dischi_result.hide();
+
+    statistiche_container.css('display', 'none');
 }
 
 
