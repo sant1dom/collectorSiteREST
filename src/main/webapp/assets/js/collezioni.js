@@ -24,7 +24,7 @@ function getCollezioniUtente() {
     toggleVisibility(collezioni_container);
 
     $.ajax({
-        url: "rest/collezioni/all",
+        url: "rest/collezioni/private",
         method: "GET",
         success: function (data) {
             //data - lista di url di collezioni

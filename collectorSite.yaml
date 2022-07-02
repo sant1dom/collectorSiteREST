@@ -52,7 +52,7 @@ paths:
         '500':
           $ref: '#/components/responses/GeneralError'
   #2 #
-  '/rest/collezioni/all':
+  '/rest/collezioni/private':
     get:
       operationId: getCollezioniPrivateUtente
       tags:
@@ -67,7 +67,8 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Collezione'
+                  type: string
+                  format: uri
         '401':
           $ref: '#/components/responses/UnauthorizedError'
         '500':
@@ -88,7 +89,8 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Collezione'
+                  type: string
+                  format: uri
         '401':
           $ref: '#/components/responses/UnauthorizedError'
         '500':
@@ -142,7 +144,8 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/DiscoGet'
+                  type: string
+                  format: uri
         '401':
           $ref: '#/components/responses/UnauthorizedError'
         '500':
@@ -181,7 +184,7 @@ paths:
           $ref: '#/components/responses/GeneralError'
   #10
     put:
-      operationId: updateDiscoCollezione
+      operationId: modificaDisco
       tags:
         - collezioni
       security:
@@ -214,7 +217,7 @@ paths:
   #6
   '/rest/collezioni/{id_collezione}/dischi/':
     post:
-      operationId: addDiscoCollezione
+      operationId: aggiungiDisco
       tags:
         - collezioni
       security:
@@ -253,7 +256,7 @@ paths:
   #7#
   '/rest/collezioni/private/dischi':
     get:
-        operationId: ricercaDiscoPrivate
+        operationId: ricercaDischiPrivati
         tags:
             - collezioni
         security:
@@ -292,7 +295,8 @@ paths:
                   schema:
                       type: array
                       items:
-                        $ref: '#/components/schemas/DiscoGet'
+                        type: string
+                        format: uri
             '401':
               $ref: '#/components/responses/UnauthorizedError'
             '500':
@@ -301,7 +305,7 @@ paths:
               $ref: '#/components/responses/NotFoundError'
   '/rest/collezioni/dischi':
     get:
-      operationId: ricercaDiscoPubbliche
+      operationId: ricercaDischiPubblici
       tags:
         - collezioni
       parameters:
@@ -343,7 +347,8 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/DiscoGet'
+                  type: string
+                  format: uri
         '401':
           $ref: '#/components/responses/UnauthorizedError'
         '500':
@@ -353,7 +358,7 @@ paths:
           ##
   '/rest/collezioni/condivise/dischi':
     get:
-      operationId: ricercaDiscoCondivise
+      operationId: ricercaDischiCondivisi
       tags:
         - collezioni
       security:
@@ -392,7 +397,8 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/DiscoGet'
+                  type: string
+                  format: uri
         '401':
           $ref: '#/components/responses/UnauthorizedError'
         '500':
@@ -414,7 +420,8 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Autore'
+                  type: string
+                  format: uri
         '500':
           $ref: '#/components/responses/GeneralError'
   #9#
@@ -460,7 +467,8 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/DiscoGet'
+                  type: string
+                  format: uri
         '500':
           $ref: '#/components/responses/GeneralError'
         '404':
