@@ -1,12 +1,16 @@
 const statistiche_container = $("#statistiche-container");
-
+let stats_pubbliche = $('#stats_pubbliche')
+let stats_utente = $('#stats_utente')
+let stats_dischi_autore = $('#stats_dischi_autore')
+let stats_dischi_etichetta = $('#stats_dischi_etichetta')
+let stats_dischi_anno = $('#stats_dischi_anno')
+let stats_dischi_genere = $('#stats_dischi_genere')
+let arr = [stats_pubbliche, stats_utente, stats_dischi_autore, stats_dischi_etichetta, stats_dischi_anno, stats_dischi_genere];
 
 //Numero di dischi per anno
 function getStats() {
-    if (statistiche_container.css("display") === "none") {
-        statistiche_container.css("display", "block");
-    }
-    toggleVisibility($('#stats_pubbliche'));
+    disableOthers();
+    toggleVisibility(stats_pubbliche);
     $("#numero_dischi").text("Numero di dischi totali nel sistema: ");
     $("#numero_tracce").text("Numero di tracce totali nel sistema: ");
     $("#numero_autori").text("Numero di autori totali nel sistema: ");
@@ -31,10 +35,8 @@ function getStats() {
 }
 
 function getStatsUtenteLoggato() {
-    if (statistiche_container.css("display") === "none") {
-        statistiche_container.css("display", "block");
-    }
-    toggleVisibility($('#stats_utente'));
+    disableOthers();
+    toggleVisibility(stats_utente);
     $.ajax({
         url: "rest/stats/numero_collezioni_private_utente",
         method: "GET",
@@ -57,14 +59,16 @@ function getStatsUtenteLoggato() {
 }
 
 function getStatsDischiByEtichetta(val) {
-    if (statistiche_container.css("display") === "none") {
-        statistiche_container.css("display", "block");
-    }
+    disableOthers();
+    toggleVisibility(stats_dischi_etichetta);
     if (val) {
         $.ajax({
             url: "rest/stats/dischi_per_etichetta/" + val,
             method: "GET",
-            success: () => {},
+            success: function (data) {
+                $("#numero_dischi_per_etichetta").text("Numero di dischi di questa etichetta: ");
+                $("#numero_dischi_per_etichetta").append(data['numero_dischi_per_etichetta']);
+            },
             error: function (request, status, error) {
                 handleError(request, status, error, "", "Caricamento stats per etichetta fallito.");
             },
@@ -78,14 +82,16 @@ function getStatsDischiByEtichetta(val) {
 }
 
 function getStatsDischiByAutore(val) {
-    if (statistiche_container.css("display") === "none") {
-        statistiche_container.css("display", "block");
-    }
+    disableOthers();
+    toggleVisibility(stats_dischi_autore);
     if (val) {
         $.ajax({
             url: "rest/stats/dischi_per_autore/" + val,
             method: "GET",
-            success: () => {},
+            success: function (data) {
+                $("#numero_dischi_per_autore").text("Numero di dischi di questo autore: ");
+                $("#numero_dischi_per_autore").append(data['numero_dischi_per_autore']);
+            },
             error: function (request, status, error) {
                 handleError(request, status, error, "", "Caricamento stats per autore fallito.");
             },
@@ -99,14 +105,16 @@ function getStatsDischiByAutore(val) {
 }
 
 function getStatsDischiByAnno(val) {
-    if (statistiche_container.css("display") === "none") {
-        statistiche_container.css("display", "block");
-    }
+    disableOthers();
+    toggleVisibility(stats_dischi_anno);
     if (val) {
         $.ajax({
             url: "rest/stats/dischi_per_anno/" + val,
             method: "GET",
-            success: () => {},
+            success: function (data) {
+                $("#numero_dischi_per_anno").text("Numero di dischi di questo anno: ");
+                $("#numero_dischi_per_anno").append(data['numero_dischi_per_anno']);
+            },
             error: function (request, status, error) {
                 handleError(request, status, error, "", "Caricamento stats per anno fallito.");
             },
@@ -120,14 +128,16 @@ function getStatsDischiByAnno(val) {
 }
 
 function getStatsDischiByGenere(val) {
-    if (statistiche_container.css("display") === "none") {
-        statistiche_container.css("display", "block");
-    }
+    disableOthers();
+    toggleVisibility(stats_dischi_genere);
     if (val) {
         $.ajax({
             url: "rest/stats/dischi_per_genere/" + val,
             method: "GET",
-            success: () => {},
+            success: function (data) {
+                $("#numero_dischi_per_genere").text("Numero di dischi di questo genere: ");
+                $("#numero_dischi_per_genere").append(data['numero_dischi_per_genere']);
+            },
             error: function (request, status, error) {
                 handleError(request, status, error, "", "Caricamento stats per genere fallito.");
             },
@@ -138,4 +148,37 @@ function getStatsDischiByGenere(val) {
         dischi_empty.show();
         dischi_empty.text("Non ci sono dischi di questo genere.");
     }
+}
+
+function disableOthers(){
+    if (statistiche_container.css("display") === "none") {
+        statistiche_container.css("display", "block");
+    }
+    $.each(arr, function(index, value){
+        value.css("display", "none");
+    });
+}
+
+function populateAutoriSelect(){
+    let select = $("#getStatsDischiByAutore_e");
+    $.ajax({
+        url: "rest/autori",
+        method: "GET",
+        success: function (data) {
+            $.each(data, function(index, value){
+                $.ajax({
+                    url: value,
+                    method: "GET",
+                    success: function (data) {
+                        select.append("<option value='" + data["nome_artistico"] + "'>" + data["nome_artistico"] + "</option>");
+                        select.trigger('change');
+                        select.selectpicker("refresh");
+                    }
+                })
+            });
+        },
+        error: function (request, status, error) {
+            handleError(request, status, error, "", "Caricamento autori fallito.");
+        }
+    });
 }

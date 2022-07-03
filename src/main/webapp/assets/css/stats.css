@@ -5,3 +5,19 @@
 #stats_utente {
     display: none;
 }
+
+#stats_dischi_etichetta {
+    display: none;
+}
+
+#stats_dischi_autore {
+    display: none;
+}
+
+#stats_dischi_anno {
+    display: none;
+}
+
+#stats_dischi_genere {
+    display: none;
+}

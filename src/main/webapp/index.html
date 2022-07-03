@@ -189,7 +189,7 @@
                     COLLEZIONI
                 </div>
                 <div class="table-scrollable">
-                    <table class="table table-borderless table-striped">
+                    <table class="table table-borderless table-striped" aria-label="Tabella Collezioni">
                         <thead class="table-dark">
                         <tr>
                             <th scope="col">Id</th>
@@ -447,7 +447,7 @@
                     AUTORI
                 </div>
                 <div class="table-scrollable">
-                    <table class="table table-borderless table-striped">
+                    <table class="table table-borderless table-striped" aria-label="Tabella autori">
                         <thead class="table-dark">
                         <tr>
                             <th scope="col">Id</th>
@@ -577,7 +577,7 @@
                             <div class="hidden" id="ricercaDiscoCollezioniPubbliche_form">
                                 <div class="horizontal-separator filtro-horizontal-separator"></div>
                                 <div class="flex justify-between">
-                                    <label for="titolo_filtro_condiviso">Titolo</label>
+                                    <label for="titolo_filtro_pubblico">Titolo</label>
                                     <input class="input-small" value="" type="text" name="titolo"
                                            id="titolo_filtro_pubblico">
                                 </div>
@@ -691,7 +691,7 @@
                     DISCHI
                 </div>
                 <div class="table-scrollable">
-                    <table class="table table-borderless table-striped">
+                    <table class="table table-borderless table-striped" aria-label="Tabella dischi">
                         <thead class="table-dark">
                         <tr>
                             <th scope="col">Id</th>
@@ -732,16 +732,89 @@
                         </dd>
                         <!-- Aggiungere form il metodo da chiamare è quello dell'onclick -->
                         <dd class="">
-                            <button class="btn btn-success btn-w-fixed" onclick="getStatsDischiByEtichetta()">getStatsDischiByEtichetta</button>
+                            <button class="btn btn-primary btn-w-fixed" onclick="toggleVisibility($('#getStatsDischiByEtichetta_form'))">getStatsDischiByEtichetta</button>
+                            <div class="hidden" id="getStatsDischiByEtichetta_form">
+                                <div class="horizontal-separator filtro-horizontal-separator"></div>
+                                <div class="flex justify-between">
+                                    <label for="getStatsDischiByEtichetta_e">Etichetta</label>
+                                    <input class="input-small" type="text" name="getStatsDischiByEtichetta_e"
+                                           id="getStatsDischiByEtichetta_e">
+                                </div>
+                                <div class="flex justify-center mt-3" style="width: 100%;">
+                                    <button onclick="getStatsDischiByEtichetta($('#getStatsDischiByEtichetta_e').val())"
+                                            class="btn btn-warning">Trova
+                                    </button>
+                                </div>
+                                <div class="horizontal-separator filtro-horizontal-separator"></div>
+                            </div>
                         </dd>
                         <dd class="">
-                            <button class="btn btn-success btn-w-fixed" onclick="getStatsDischiByAnno()">getStatsDischiByAnno</button>
+                            <button class="btn btn-primary btn-w-fixed" onclick="toggleVisibility($('#getStatsDischiByAutore_form')); populateAutoriSelect()">getStatsDischiByAutore</button>
+                            <div class="hidden" id="getStatsDischiByAutore_form">
+                                <div class="horizontal-separator filtro-horizontal-separator"></div>
+                                <div class="flex justify-between">
+                                    <label for="getStatsDischiByAutore_e">Autore</label>
+                                    <select class="selectpicker" name="getStatsDischiByAutore_e"
+                                            id="getStatsDischiByAutore_e">
+                                        <option value="">Seleziona un autore</option>
+                                    </select>
+                                </div>
+                                <div class="flex justify-center mt-3" style="width: 100%;">
+                                    <button onclick="getStatsDischiByAutore($('#getStatsDischiByAutore_e').val())"
+                                            class="btn btn-warning">Trova
+                                    </button>
+                                </div>
+                                <div class="horizontal-separator filtro-horizontal-separator"></div>
+                            </div>
                         </dd>
                         <dd class="">
-                            <button class="btn btn-success btn-w-fixed" onclick="getStatsDischiByGenere()">getStatsDischiByGenere</button>
+                            <button class="btn btn-primary btn-w-fixed" onclick="toggleVisibility($('#getStatsDischiByAnno_form'))">getStatsDischiByAnno</button>
+                            <div class="hidden" id="getStatsDischiByAnno_form">
+                                <div class="horizontal-separator filtro-horizontal-separator"></div>
+                                <div class="flex justify-between">
+                                    <label for="getStatsDischiByAnno_e">Anno</label>
+                                    <input class="input-small" type="number" name="getStatsDischiByAnno_e"
+                                           id="getStatsDischiByAnno_e" min="1900" max="2022">
+                                </div>
+                                <div class="flex justify-center mt-3" style="width: 100%;">
+                                    <button onclick="getStatsDischiByAnno($('#getStatsDischiByAnno_e').val())"
+                                            class="btn btn-warning">Trova
+                                    </button>
+                                </div>
+                                <div class="horizontal-separator filtro-horizontal-separator"></div>
+                            </div>
                         </dd>
                         <dd class="">
-                            <button class="btn btn-success btn-w-fixed" onclick="getStatsDischiByAutore()">getStatsDischiByAutore</button>
+                            <button class="btn btn-primary btn-w-fixed" onclick="toggleVisibility($('#getStatsDischiByGenere_form'))">getStatsDischiByGenere</button>
+                            <div class="hidden" id="getStatsDischiByGenere_form">
+                                <div class="horizontal-separator filtro-horizontal-separator"></div>
+                                <div class="flex justify-between">
+                                    <label for="getStatsDischiByGenere_e">Genere</label>
+                                    <select class="selectpicker" name="getStatsDischiByGenere_e"
+                                            id="getStatsDischiByGenere_e">
+                                        <option value="">Seleziona un genere</option>
+                                        <option value="POP">POP</option>
+                                        <option value="ROCK">ROCK</option>
+                                        <option value="JAZZ">JAZZ</option>
+                                        <option value="CLASSIC">CLASSIC</option>
+                                        <option value="METAL">METAL</option>
+                                        <option value="RAP">RAP</option>
+                                        <option value="BLUES">BLUES</option>
+                                        <option value="PUNK">PUNK</option>
+                                        <option value="REGGAE">REGGAE</option>
+                                        <option value="COUNTRY">COUNTRY</option>
+                                        <option value="HIPHOP">HIPHOP</option>
+                                        <option value="ELECTRONIC">ELECTRONIC</option>
+                                        <option value="OTHER">OTHER</option>
+                                    </select>
+                                </div>
+                                <div class="flex justify-center mt-3" style="width: 100%;">
+                                    <button onclick="getStatsDischiByGenere($('#getStatsDischiByGenere_e').val())"
+                                            class="btn btn-warning">Trova
+                                    </button>
+                                </div>
+                                <div class="horizontal-separator filtro-horizontal-separator"></div>
+                            </div>
                         </dd>
                     </dl>
                 </div>
@@ -774,6 +847,42 @@
                             <div class="ml-3">
                                 <h4 id="numero_collezioni_private_utente">Numero di tue collezioni private nel sistema: </h4>
                                 <h4 id="numero_collezioni_totali_utente">Numero di tue collezioni totali nel sistema: </h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="stats_dischi_etichetta">
+                    <div class="row ml-5 mt-3">
+                        <div class="col">
+                            <div class="ml-3">
+                                <h4 id="numero_dischi_per_etichetta">Numero di dischi di questa etichetta: </h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="stats_dischi_autore">
+                    <div class="row ml-5 mt-3">
+                        <div class="col">
+                            <div class="ml-3">
+                                <h4 id="numero_dischi_per_autore">Numero di dischi di questo autore: </h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="stats_dischi_anno">
+                    <div class="row ml-5 mt-3">
+                        <div class="col">
+                            <div class="ml-3">
+                                <h4 id="numero_dischi_per_anno">Numero di dischi di questo anno: </h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="stats_dischi_genere">
+                    <div class="row ml-5 mt-3">
+                        <div class="col">
+                            <div class="ml-3">
+                                <h4 id="numero_dischi_per_genere">Numero di dischi di questo genere: </h4>
                             </div>
                         </div>
                     </div>
