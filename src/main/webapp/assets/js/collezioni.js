@@ -124,6 +124,7 @@ function addDiscoCollezione(c) {
             }),
             success: function () {
                 collezione_result.children().remove();
+                clear();
                 message("Collezione aggiornata con il nuovo disco.", "success");
             },
             error: function (request, status, error) {
@@ -163,6 +164,7 @@ function updateDiscoCollezione(c, d) {
             }),
             success: function () {
                 collezione_result.children().remove();
+                clear();
                 message("Collezione aggiornata con il nuovo disco.", "success");
             },
             error: function (request, status, error) {

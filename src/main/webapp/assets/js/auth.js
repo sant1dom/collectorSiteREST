@@ -1,3 +1,9 @@
+/*
+* File per l'autenticazione.
+* @Author: Davide De Acetis
+* @Author: Raluca Mihaela Bujoreanu
+*/
+
 $(document).ready(function () {
     const login = $('#login');
     const login_form = $('#login-form');
@@ -34,10 +40,12 @@ $(document).ready(function () {
                 login.css('display', 'none');
                 login_form.css('display', 'none');
                 logout.css('display', 'block');
+                message("Login effettuato con successo.", "success");
             },
-            errors: function (data) {
-                alert("Errore di login");
-            }
+            error: function (request, status, error) {
+                handleError(request, status, error, "", "Errore in fase di login.");
+            },
+            cache: false,
         });
     });
 
@@ -51,10 +59,12 @@ $(document).ready(function () {
                 $.removeCookie('token');
                 login.css('display', 'block');
                 logout.css('display', 'none');
+                message("Logout effettuato con successo.", "success");
             },
-            errors: function (data) {
-                alert("Errore di logout");
-            }
+            error: function (request, status, error) {
+                handleError(request, status, error, "", "Errore in fase di logout.");
+            },
+            cache: false,
         });
     });
 });
